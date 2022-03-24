@@ -2,6 +2,7 @@
   <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Welcome to Your Vue.js App" />
   <h3 class="red">Red</h3>
+  <h1 class="text-3xl font-bold underline">Hello world!</h1>
 </template>
 
 <script>
