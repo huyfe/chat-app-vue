@@ -1,3 +1,3 @@
 <template>
-  <div>Messenger</div>
+  <div>Messenger {{ $route.params.name }}</div>
 </template>
