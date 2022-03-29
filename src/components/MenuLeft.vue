@@ -32,11 +32,11 @@
       <router-link
         v-for="messenger in messengerList"
         :key="`key_mess_${messenger.id}`"
-        :to="`/messenger/${messenger.slug}`"
-        class="group cursor-pointer"
+        :to="`/${messenger.slug}`"
+        class="group group--messenger-item cursor-pointer"
       >
         <div
-          class="messenger-item h-[75px] flex items-center p-3 group-hover:bg-blue-dark rounded duration-100"
+          class="messenger-item h-[75px] flex items-center p-3 group-hover:bg-blue-dark group-hover:shadow-blue-dark rounded duration-100"
         >
           <div class="messenger-item__avatar mr-3 relative">
             <img
@@ -84,9 +84,31 @@
       </router-link>
     </div>
     <div
-      class="menu sticky top-[calc(100vh-85px)] h-[85px] bg-blue-light pt-5 px-9 border-t border-gray"
+      class="menu sticky top-[calc(100vh-85px)] h-[85px] bg-blue-light pt-5 px-7 border-t border-gray"
     >
-      Sticky
+      <ul class="h-full flex justify-between">
+        <li class="flex-1">
+          <router-link to="/messenger/" class="block h-full menu-item"
+            ><IconPersonal class="mx-auto" />
+            {{ $route.query.messenger }}
+          </router-link>
+        </li>
+        <li class="flex-1">
+          <router-link to="/groups/" class="block h-full menu-item"
+            ><IconGroups class="mx-auto"
+          /></router-link>
+        </li>
+        <li class="flex-1">
+          <router-link to="/stared/" class="block h-full menu-item"
+            ><IconStar class="mx-auto"
+          /></router-link>
+        </li>
+        <li class="flex-1">
+          <router-link to="/search/" class="block h-full menu-item"
+            ><IconLookup class="mx-auto"
+          /></router-link>
+        </li>
+      </ul>
     </div>
   </aside>
 </template>
@@ -98,6 +120,10 @@ import IconOnline from "./icons/IconOnline.vue";
 import IconOffline from "./icons/IconOffline.vue";
 import IconWorking from "./icons/IconWorking.vue";
 import IconActionMessenger from "./icons/IconActionMessenger.vue";
+import IconPersonal from "./icons/IconPersonal.vue";
+import IconGroups from "./icons/IconGroups.vue";
+import IconStar from "./icons/IconStar.vue";
+import IconLookup from "./icons/IconLookup.vue";
 
 // Import constant
 import MessengerStatus from "../const/MessengerStatus";
@@ -110,6 +136,10 @@ export default {
     IconOffline,
     IconWorking,
     IconActionMessenger,
+    IconPersonal,
+    IconGroups,
+    IconStar,
+    IconLookup,
   },
   data() {
     return {

@@ -11,8 +11,9 @@ const routes = [
         component: Main
     },
     {
-        path: '/messenger/:name',
-        component: Messenger
+        path: '/:name',
+        component: Messenger,
+
     },
     {
         path: '/:catchAll(.*)',
