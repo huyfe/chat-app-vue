@@ -1,0 +1,31 @@
+<template>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="5"
+    height="21"
+    viewBox="0 0 5 21"
+    fill="none"
+  >
+    <circle
+      cx="2.5"
+      cy="2.5"
+      r="2.5"
+      transform="rotate(-90 2.5 2.5)"
+      fill="#6588DE"
+    />
+    <circle
+      cx="2.5"
+      cy="10.5"
+      r="2.5"
+      transform="rotate(-90 2.5 10.5)"
+      fill="#6588DE"
+    />
+    <circle
+      cx="2.5"
+      cy="18.5"
+      r="2.5"
+      transform="rotate(-90 2.5 18.5)"
+      fill="#6588DE"
+    />
+  </svg>
+</template>
