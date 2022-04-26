@@ -127,13 +127,27 @@
     <div class="chat-box__controls mt-8">
       <div>
         <form @submit.prevent class="relative">
+          <div
+            class="
+              chat-box__controls__list
+              h-full
+              absolute
+              top-0
+              left-[25px]
+              flex
+              items-center
+            "
+          >
+            <IconAttachment class="mr-4" />
+            <IconVoice />
+          </div>
           <textarea
             rows="1"
             class="
               block
               w-full
               py-2
-              pl-20
+              pl-19
               pr-[150px]
               border border-blue-fade
               outline-0
@@ -182,12 +196,16 @@ import IconOnline from "./icons/IconOnline.vue";
 import IconOffline from "./icons/IconOffline.vue";
 import IconWorking from "./icons/IconWorking.vue";
 import IconSend from "./icons/IconSend.vue";
+import IconAttachment from "./icons/IconAttachment.vue";
+import IconVoice from "./icons/IconVoice.vue";
 export default {
   components: {
     IconOnline,
     IconOffline,
     IconWorking,
     IconSend,
+    IconAttachment,
+    IconVoice,
   },
   setup() {
     const chatBox = ref([
