@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#app {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  color: #52585d;
+}
+
+@layer components {
+  .btn-primary {
+    @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+  }
+  .chat-box__item {
+    @apply mb-6 last:mb-0 w-fit;
+
+    &__name {
+      @apply text-sm font-semibold mb-2;
+    }
+    &__avatar-messages {
+      @apply flex gap-2;
+    }
+    &__avatar {
+      img {
+        @apply rounded-full min-w-[44px] h-[44px] object-cover;
+      }
+    }
+    &__message {
+      @apply w-fit mt-2 first:mt-0 bg-blue-light rounded rounded-tl-none px-4 py-3 text-sm;
+    }
+    &__text {
+      @apply min-w-[150px] max-w-[505px];
+    }
+    &__time {
+      @apply text-blue-dark text-right text-xs opacity-60 mt-1;
+    }
+
+    // For message from friend
+    &--you {
+      @apply mr-auto;
+    }
+
+    // For message from me
+    &--me {
+      @apply ml-auto;
+      .chat-box__item__name {
+        @apply text-right;
+      }
+      .chat-box__item__avatar-messages {
+        @apply flex-row-reverse;
+      }
+      .chat-box__item__message {
+        @apply bg-orange text-white;
+      }
+      .chat-box__item__text {
+        @apply min-w-fit;
+      }
+      .chat-box__item__time {
+        @apply text-white-fade;
+      }
+    }
+  }
+}

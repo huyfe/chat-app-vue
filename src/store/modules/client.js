@@ -16,7 +16,7 @@ const getters = {
 const actions = {
     getProfile({ commit }) {
         const profile = {
-            id: 'abc123',
+            id: 'me123',
             avatar: require('@/assets/images/user.png'),
             firstName: 'Mehmet',
             lastName: 'Revnaki',
