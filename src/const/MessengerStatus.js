@@ -4,4 +4,4 @@ const MessengerStatus = {
     WORKING: 'working',
 }
 
-module.exports = MessengerStatus;
+export default MessengerStatus;

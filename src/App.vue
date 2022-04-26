@@ -9,12 +9,24 @@
 <script>
 import MenuLeft from "./components/MenuLeft.vue";
 import Main from "./components/Main.vue";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "App",
   components: {
     MenuLeft,
     Main,
+  },
+  computed: {
+    ...mapGetters("client", {
+      profile: "clientProfile",
+    }),
+  },
+  beforeMount() {
+    this.getProfile();
+  },
+  methods: {
+    ...mapActions("client", ["getProfile"]),
   },
 };
 </script>

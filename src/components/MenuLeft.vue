@@ -1,24 +1,60 @@
 <template>
   <aside class="menu-left w-70">
+    <!-- Start Main User Header -->
     <div
-      class="user sticky top-0 flex items-center pt-6 pr-4 pb-5 pl-7 bg-blue-light rounded-b min-h-[100px] mb-2"
+      class="
+        user
+        sticky
+        top-0
+        flex
+        items-center
+        pt-6
+        pr-4
+        pb-5
+        pl-7
+        bg-blue-light
+        rounded-b
+        min-h-[100px]
+        mb-2
+      "
     >
       <div
-        class="user__avatar rounded-full w-[44px] h-[44px] overflow-hidden mr-3"
+        class="
+          user__avatar
+          rounded-full
+          min-w-[44px]
+          h-[44px]
+          overflow-hidden
+          mr-3
+        "
       >
         <img
-          :src="require('@/assets/images/user.png')"
+          :src="profile.avatar"
           alt="user"
           class="object-cover w-full h-full"
         />
       </div>
-      <div class="user__name">
-        <h3 class="font-semibold text-base">Mehmet Revnaki</h3>
+      <div class="user__name overflow-hidden">
+        <h3 class="font-semibold text-base overflow-hidden mr-6">
+          {{ `${profile.firstName} ${profile.lastName}` }}
+        </h3>
         <div
-          class="user__status w-fit min-h-[20px] flex items-center space-x-[8px] bg-blue-dark px-[7px] rounded-full"
+          class="
+            user__status
+            w-fit
+            min-h-[20px]
+            flex
+            items-center
+            space-x-[8px]
+            bg-blue-dark
+            px-[7px]
+            rounded-full
+          "
         >
           <div class="w-[8px] h-[8px] rounded-full bg-orange"></div>
-          <span class="text-white text-xs leading-none">Working</span>
+          <span class="text-white text-xs leading-none capitalize">{{
+            profile.status
+          }}</span>
           <IconCaretDown />
         </div>
       </div>
@@ -26,8 +62,22 @@
         <IconAction />
       </div>
     </div>
+    <!-- End Main User Header -->
+
+    <!-- Start Messenger List -->
     <div
-      class="messenger-list sticky top-[110px] h-[calc(100vh-195px)] overflow-y-scroll custom-scrollbar px-4 py-5 rounded-t bg-blue-light"
+      class="
+        messenger-list
+        sticky
+        top-[110px]
+        h-[calc(100vh-195px)]
+        overflow-y-scroll
+        custom-scrollbar
+        px-4
+        py-5
+        rounded-t
+        bg-blue-light
+      "
     >
       <router-link
         v-for="messenger in messengerList"
@@ -36,7 +86,16 @@
         class="group group--messenger-item cursor-pointer"
       >
         <div
-          class="messenger-item h-[75px] flex items-center p-3 group-hover:bg-blue-dark group-hover:shadow-blue-dark rounded duration-100"
+          class="
+            messenger-item
+            h-[75px]
+            flex
+            items-center
+            p-3
+            group-hover:bg-blue-dark group-hover:shadow-blue-dark
+            rounded
+            duration-100
+          "
         >
           <div class="messenger-item__avatar mr-3 relative">
             <img
@@ -59,22 +118,52 @@
           </div>
           <div class="messenger-item__name w-full overflow-hidden">
             <h3
-              class="font-semibold text-sm text-dark group-hover:text-white flex justify-between mb-[3px] duration-100"
+              class="
+                font-semibold
+                text-sm text-dark
+                group-hover:text-white
+                flex
+                justify-between
+                mb-[3px]
+                duration-100
+              "
             >
               <span>{{ messenger.fullName || "Firstname Lastname" }}</span>
               <span
-                class="font-normal text-xs text-grayer group-hover:text-white duration-100"
+                class="
+                  font-normal
+                  text-xs text-grayer
+                  group-hover:text-white
+                  duration-100
+                "
                 >{{ messenger.lastTime || "17/06/2020" }}</span
               >
             </h3>
             <div class="flex">
               <p
-                class="w-2/3 text-grayer group-hover:text-white font-light text-xs truncate duration-100"
+                class="
+                  w-2/3
+                  text-grayer
+                  group-hover:text-white
+                  font-light
+                  text-xs
+                  truncate
+                  duration-100
+                "
               >
                 {{ messenger.lastMessage || "Last message" }}
               </p>
               <div
-                class="w-1/3 messenger-item__action text-right flex items-center invisible group-hover:visible duration-100"
+                class="
+                  w-1/3
+                  messenger-item__action
+                  text-right
+                  flex
+                  items-center
+                  invisible
+                  group-hover:visible
+                  duration-100
+                "
               >
                 <IconActionMessenger class="ml-auto" />
               </div>
@@ -83,8 +172,20 @@
         </div>
       </router-link>
     </div>
+    <!-- End Messenger List -->
+
+    <!-- Start Sticky Menu -->
     <div
-      class="menu sticky top-[calc(100vh-85px)] h-[85px] bg-blue-light pt-5 px-7 border-t border-gray"
+      class="
+        menu
+        sticky
+        top-[calc(100vh-85px)]
+        h-[85px]
+        bg-blue-light
+        pt-5
+        px-7
+        border-t border-gray
+      "
     >
       <ul class="h-full flex justify-between">
         <li class="flex-1">
@@ -110,6 +211,7 @@
         </li>
       </ul>
     </div>
+    <!-- End Sticky Menu -->
   </aside>
 </template>
 <script>
@@ -127,6 +229,8 @@ import IconLookup from "./icons/IconLookup.vue";
 
 // Import constant
 import MessengerStatus from "../const/MessengerStatus";
+
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -250,6 +354,9 @@ export default {
     messengerStatus() {
       return MessengerStatus;
     },
+    ...mapGetters("client", {
+      profile: "clientProfile",
+    }),
   },
 };
 </script>
