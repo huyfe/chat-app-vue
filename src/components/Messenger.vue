@@ -141,8 +141,7 @@
             <IconAttachment class="mr-4" />
             <IconVoice />
           </div>
-          <textarea
-            rows="1"
+          <input
             class="
               block
               w-full
@@ -159,8 +158,7 @@
               mr-5
             "
             placeholder="Type a new message..."
-          >
-          </textarea>
+          />
           <button
             type="submit"
             class="
