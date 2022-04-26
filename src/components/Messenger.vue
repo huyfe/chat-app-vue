@@ -5,10 +5,10 @@
       <div
         class="
           friend
-          h-[75px]
+          h-[60px]
           flex
           items-center
-          p-3
+          p-1
           pl-0
           group-hover:bg-blue-dark group-hover:shadow-blue-dark
           rounded
