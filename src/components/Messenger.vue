@@ -1,5 +1,17 @@
 <template>
-  <div class="chat-box w-[calc(100%-350px)] flex flex-col justify-end p-6 pt-0">
+  <div
+    class="
+      chat-box
+      w-[calc(100%
+      -
+      320px
+      -350px)]
+      flex flex-col
+      justify-end
+      p-6
+      pt-0
+    "
+  >
     <!-- Start chat box message list -->
     <div class="chat-box__head -ml-6 shadow-md px-6">
       <div
@@ -112,7 +124,52 @@
     <!-- End chat box message list -->
 
     <!-- Start chat box controls -->
-    <div class="chat-box__controls mt-8">Control</div>
+    <div class="chat-box__controls mt-8">
+      <div>
+        <form @submit.prevent class="relative">
+          <textarea
+            rows="1"
+            class="
+              block
+              w-full
+              py-2
+              pl-20
+              pr-[150px]
+              border border-blue-fade
+              outline-0
+              rounded
+              bg-white-fade
+              focus:border-blue-dark
+              text-sm text-grayer
+              placeholder:text-grayer
+              mr-5
+            "
+            placeholder="Type a new message..."
+          >
+          </textarea>
+          <button
+            type="submit"
+            class="
+              h-full
+              w-[108px]
+              absolute
+              top-0
+              right-0
+              bg-blue-dark
+              text-white-fade text-sm
+              hover:bg-orange
+              rounded
+              flex
+              items-center
+              justify-center
+              duration-200
+            "
+          >
+            Send <IconSend class="ml-3" />
+          </button>
+        </form>
+      </div>
+    </div>
     <!-- End chat box controls -->
   </div>
 </template>
@@ -124,11 +181,13 @@ import MessengerStatus from "../const/MessengerStatus";
 import IconOnline from "./icons/IconOnline.vue";
 import IconOffline from "./icons/IconOffline.vue";
 import IconWorking from "./icons/IconWorking.vue";
+import IconSend from "./icons/IconSend.vue";
 export default {
   components: {
     IconOnline,
     IconOffline,
     IconWorking,
+    IconSend,
   },
   setup() {
     const chatBox = ref([
