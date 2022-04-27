@@ -5,6 +5,7 @@ import Messenger from '@/components/Messenger.vue';
 import Main from '@/components/Main.vue';
 import Error from '@/components/Error.vue';
 import Login from '@/components/Login.vue';
+import Register from '@/components/Register.vue';
 
 const routes = [
     {
@@ -14,6 +15,10 @@ const routes = [
     {
         path: '/login',
         component: Login
+    },
+    {
+        path: '/register',
+        component: Register
     },
     {
         path: '/:name',

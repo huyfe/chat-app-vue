@@ -1,12 +1,12 @@
 <template>
   <div class="login w-full">
     <div class="container h-[100vh] flex">
-      <div class="container__left w-2/4 flex items-center">
-        <form @submit.prevent class="form px-20 w-full ml-20">
+      <div class="container__left w-3/5 flex items-center">
+        <form @submit.prevent class="form px-20 w-full">
           <div
             class="
               form__wrapper
-              h-[50vh]
+              h-[55vh]
               bg-blue-dark
               rounded-lg
               shadow-lg
@@ -16,10 +16,41 @@
             "
           >
             <legend class="text-white text-xl font-bold text-center mb-4">
-              Login
+              Register
             </legend>
+            <div class="form__group flex gap-3 mb-4">
+              <input
+                type="text"
+                class="
+                  bg-white-fade
+                  w-full
+                  px-3
+                  py-1
+                  outline-0
+                  text-black text-base
+                "
+                placeholder="First Name"
+                name=""
+                id=""
+                autocomplete="off"
+              />
+              <input
+                type="text"
+                class="
+                  bg-white-fade
+                  w-full
+                  px-3
+                  py-1
+                  outline-0
+                  text-black text-base
+                "
+                placeholder="Last Name"
+                name=""
+                id=""
+                autocomplete="off"
+              />
+            </div>
             <div class="form__group mb-4">
-              <label for="email" class="block mb-3">Email</label>
               <input
                 type="email"
                 class="
@@ -33,10 +64,10 @@
                 placeholder="Email Address"
                 name=""
                 id=""
+                autocomplete="off"
               />
             </div>
-            <div class="form__group mb-5">
-              <label for="password" class="block mb-3">Password</label>
+            <div class="form__group mb-4">
               <input
                 type="password"
                 class="
@@ -50,6 +81,24 @@
                 placeholder="Password"
                 name=""
                 id=""
+                autocomplete="off"
+              />
+            </div>
+            <div class="form__group mb-5">
+              <input
+                type="password"
+                class="
+                  bg-white-fade
+                  w-full
+                  px-3
+                  py-1
+                  outline-0
+                  text-black text-base
+                "
+                placeholder="Confirm Password"
+                name=""
+                id=""
+                autocomplete="off"
               />
             </div>
             <div class="form__group mb-4">
@@ -64,19 +113,17 @@
                   duration-200
                 "
               >
-                Log in
+                Register
               </button>
             </div>
             <div class="link-register text-center text-sm">
-              <router-link to="/register"
-                >Haven't account? Register</router-link
-              >
+              <router-link to="/login">Have account? Login</router-link>
             </div>
           </div>
         </form>
       </div>
-      <div class="container__right w-2/4 flex items-center">
-        <img :src="require('@/assets/images/login.png')" alt="" class="h-5/6" />
+      <div class="container__right w-2/5 flex items-center">
+        <img :src="require('@/assets/images/login.png')" alt="" class="h-4/5" />
       </div>
     </div>
   </div>
