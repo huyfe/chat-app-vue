@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper flex h-[100vh]">
-    <MenuLeft />
+    <MenuLeft v-if="profile.id" />
     <!-- <Main /> -->
     <router-view />
   </div>
@@ -23,7 +23,7 @@ export default {
     }),
   },
   beforeMount() {
-    this.getProfile();
+    // this.getProfile();
   },
   methods: {
     ...mapActions("client", ["getProfile"]),

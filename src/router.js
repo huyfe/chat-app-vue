@@ -4,11 +4,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Messenger from '@/components/Messenger.vue';
 import Main from '@/components/Main.vue';
 import Error from '@/components/Error.vue';
+import Login from '@/components/Login.vue';
 
 const routes = [
     {
         path: '/',
         component: Main
+    },
+    {
+        path: '/login',
+        component: Login
     },
     {
         path: '/:name',
