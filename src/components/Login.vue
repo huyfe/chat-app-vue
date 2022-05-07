@@ -2,7 +2,7 @@
   <div class="login w-full">
     <div class="container h-[100vh] flex">
       <div class="container__left w-2/4 flex items-center">
-        <form @submit.prevent class="form px-20 w-full ml-20">
+        <form @submit.prevent="login" class="form px-20 w-full ml-20">
           <div
             class="
               form__wrapper
@@ -21,7 +21,8 @@
             <div class="form__group mb-4">
               <label for="email" class="block mb-3">Email</label>
               <input
-                type="email"
+                v-model="email"
+                type="text"
                 class="
                   bg-white-fade
                   w-full
@@ -32,12 +33,13 @@
                 "
                 placeholder="Email Address"
                 name=""
-                id=""
+                id="email"
               />
             </div>
             <div class="form__group mb-5">
               <label for="password" class="block mb-3">Password</label>
               <input
+                v-model="password"
                 type="password"
                 class="
                   bg-white-fade
@@ -49,7 +51,7 @@
                 "
                 placeholder="Password"
                 name=""
-                id=""
+                id="password"
               />
             </div>
             <div class="form__group mb-4">
@@ -83,14 +85,35 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import { mapActions } from "vuex";
+import { authService } from "@/services/auth";
+import { checkCookie } from "@/helpers/common";
+
 export default {
-  beforeMount() {
-    // this.getProfile();
-    // console.log(this.profile);
+  setup() {
+    const email = ref("");
+    const password = ref("");
+    return {
+      email,
+      password,
+    };
   },
+  async beforeMount() {},
+
   methods: {
     ...mapActions("client", ["getProfile"]),
+    async login() {
+      try {
+        const result = await authService.login(this.email, this.password);
+        console.log(result.data.profile);
+        this.getProfile(result.data.profile);
+        this.$router.push("/");
+      } catch (error) {
+        // console.log(error.response.data);
+        console.log(error);
+      }
+    },
   },
 };
 </script>

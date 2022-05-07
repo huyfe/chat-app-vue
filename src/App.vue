@@ -1,7 +1,5 @@
 <template>
   <div class="wrapper flex h-[100vh]">
-    <MenuLeft v-if="profile.id" />
-    <!-- <Main /> -->
     <router-view />
   </div>
 </template>
@@ -10,6 +8,8 @@
 import MenuLeft from "./components/MenuLeft.vue";
 import Main from "./components/Main.vue";
 import { mapGetters, mapActions } from "vuex";
+import { checkCookie } from "@/helpers/common";
+import { authService } from "./services/auth";
 
 export default {
   name: "App",
@@ -22,8 +22,14 @@ export default {
       profile: "clientProfile",
     }),
   },
-  beforeMount() {
+  async beforeMount() {
     // this.getProfile();
+    // console.log(this.profile);
+    const isLoggedIn = await checkCookie();
+    console.log(isLoggedIn);
+    if (isLoggedIn) {
+      this.getProfile(isLoggedIn);
+    }
   },
   methods: {
     ...mapActions("client", ["getProfile"]),

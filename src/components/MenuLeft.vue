@@ -29,14 +29,14 @@
         "
       >
         <img
-          :src="profile.avatar"
+          :src="profile.avatar || require('@/assets/images/messenger-1.png')"
           alt="user"
           class="object-cover w-full h-full"
         />
       </div>
       <div class="user__name overflow-hidden">
         <h3 class="font-semibold text-base overflow-hidden mr-6">
-          {{ `${profile.firstName} ${profile.lastName}` }}
+          {{ `${profile.name}` }}
         </h3>
         <div
           class="
@@ -53,7 +53,7 @@
         >
           <div class="w-[8px] h-[8px] rounded-full bg-orange"></div>
           <span class="text-white text-xs leading-none capitalize">{{
-            profile.status
+            profile.status || "Online"
           }}</span>
           <IconCaretDown />
         </div>

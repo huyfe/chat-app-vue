@@ -2,7 +2,7 @@
   <div class="login w-full">
     <div class="container h-[100vh] flex">
       <div class="container__left w-3/5 flex items-center">
-        <form @submit.prevent class="form px-20 w-full">
+        <form @submit.prevent="submit" class="form px-20 w-full">
           <div
             class="
               form__wrapper
@@ -29,22 +29,8 @@
                   outline-0
                   text-black text-base
                 "
-                placeholder="First Name"
-                name=""
-                id=""
-                autocomplete="off"
-              />
-              <input
-                type="text"
-                class="
-                  bg-white-fade
-                  w-full
-                  px-3
-                  py-1
-                  outline-0
-                  text-black text-base
-                "
-                placeholder="Last Name"
+                v-model="fullName"
+                placeholder="Full Name"
                 name=""
                 id=""
                 autocomplete="off"
@@ -52,6 +38,7 @@
             </div>
             <div class="form__group mb-4">
               <input
+                v-model="email"
                 type="email"
                 class="
                   bg-white-fade
@@ -69,6 +56,7 @@
             </div>
             <div class="form__group mb-4">
               <input
+                v-model="password"
                 type="password"
                 class="
                   bg-white-fade
@@ -86,6 +74,7 @@
             </div>
             <div class="form__group mb-5">
               <input
+                v-model="confirmPassword"
                 type="password"
                 class="
                   bg-white-fade
@@ -131,13 +120,36 @@
 
 <script>
 import { mapActions } from "vuex";
+import { authService } from "@/services/auth";
 export default {
+  data() {
+    return {
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+  },
   beforeMount() {
     // this.getProfile();
     // console.log(this.profile);
   },
   methods: {
     ...mapActions("client", ["getProfile"]),
+    async submit() {
+      const user = {
+        name: this.fullName,
+        email: this.email,
+        password: this.password,
+      };
+      try {
+        const result = await authService.register(user);
+        console.log(result);
+        this.$router.push("/login");
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 };
 </script>

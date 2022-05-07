@@ -1,4 +1,6 @@
 <template>
+  <MenuLeft />
+
   <div
     class="
       chat-box
@@ -196,6 +198,8 @@ import IconWorking from "./icons/IconWorking.vue";
 import IconSend from "./icons/IconSend.vue";
 import IconAttachment from "./icons/IconAttachment.vue";
 import IconVoice from "./icons/IconVoice.vue";
+import MenuLeft from "./MenuLeft.vue";
+
 export default {
   components: {
     IconOnline,
@@ -204,6 +208,7 @@ export default {
     IconSend,
     IconAttachment,
     IconVoice,
+    MenuLeft,
   },
   setup() {
     const chatBox = ref([
