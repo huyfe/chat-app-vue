@@ -92,7 +92,7 @@
       </div>
       <!-- End chat box date -->
       <div
-        v-for="(item, index) in chatBox"
+        v-for="(item, index) in chatBox.chatData"
         :key="`key_chat_box_${index}`"
         class="chat-box__item"
         :class="
@@ -186,6 +186,27 @@
     </div>
     <!-- End chat box controls -->
   </div>
+  <aside class="aside-right flex-1 px-[15px]">
+    <button
+      class="
+        w-[108px]
+        h-[40px]
+        bg-blue-dark
+        text-white-fade text-sm
+        hover:bg-orange
+        rounded
+        flex
+        items-center
+        justify-center
+        duration-200
+        mt-[10px]
+        ml-auto
+      "
+      @click.prevent="logout()"
+    >
+      Log out
+    </button>
+  </aside>
 </template>
 
 <script>
@@ -199,7 +220,9 @@ import IconSend from "./icons/IconSend.vue";
 import IconAttachment from "./icons/IconAttachment.vue";
 import IconVoice from "./icons/IconVoice.vue";
 import MenuLeft from "./MenuLeft.vue";
-import { postService } from "@/services/post";
+import { userService } from "@/services/user";
+import { boxChat } from "@/fakeBoxChat";
+import { deleteCookie } from "@/helpers/common";
 
 export default {
   components: {
@@ -212,75 +235,7 @@ export default {
     MenuLeft,
   },
   setup() {
-    const chatBox = ref([
-      {
-        id: "you123",
-        avatar: require("@/assets/images/messenger-1.png"),
-        firstName: "Phillip",
-        lastName: "Torff",
-        messages: [
-          {
-            text: "Hello m8!",
-            time: "15:02",
-            isReplay: false,
-          },
-          {
-            text: "I have send the files back to ya it only took me about 60 mins this time was with testing too.",
-            time: "15:03",
-            isReplay: true,
-          },
-        ],
-      },
-      {
-        id: "me123",
-        avatar: require("@/assets/images/user.png"),
-        firstName: "Mehmet",
-        lastName: "Revnaki",
-        messages: [
-          {
-            text: "Thank you Phillip!",
-            time: "15:07",
-            isReplay: false,
-          },
-        ],
-      },
-      {
-        id: "you123",
-        avatar: require("@/assets/images/messenger-1.png"),
-        firstName: "Phillip",
-        lastName: "Torff",
-        messages: [
-          {
-            text: "Hello m8!",
-            time: "15:02",
-            isReplay: false,
-          },
-          {
-            text: "I have send the files back to ya it only took me about 60 mins this time was with testing too.",
-            time: "15:03",
-            isReplay: true,
-          },
-        ],
-      },
-      {
-        id: "you123",
-        avatar: require("@/assets/images/messenger-1.png"),
-        firstName: "Phillip",
-        lastName: "Torff",
-        messages: [
-          {
-            text: "Hello m8!",
-            time: "15:02",
-            isReplay: false,
-          },
-          {
-            text: "I have send the files back to ya it only took me about 60 mins this time was with testing too.",
-            time: "15:03",
-            isReplay: true,
-          },
-        ],
-      },
-    ]);
+    const chatBox = ref(boxChat);
     const friend = ref({
       id: 0,
       firstName: "Phillip",
@@ -303,32 +258,11 @@ export default {
       profile: "clientProfile",
     }),
   },
-  async mounted() {
-    await postService
-      .find()
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
-  created() {
-    this.$watch(
-      () => this.$route.params,
-      async (toParams, previousParams) => {
-        // react to route changes...
-        console.log(this.chatBox);
-        await this.axios
-          .get("http://localhost:3000/api/posts")
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    );
+  methods: {
+    logout() {
+      deleteCookie("token");
+      this.$router.push("/login");
+    },
   },
 };
 </script>

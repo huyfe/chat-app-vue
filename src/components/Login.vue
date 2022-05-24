@@ -89,6 +89,7 @@ import { ref } from "vue";
 import { mapActions } from "vuex";
 import { authService } from "@/services/auth";
 import { checkCookie } from "@/helpers/common";
+import axios from "axios";
 
 export default {
   setup() {
@@ -107,6 +108,8 @@ export default {
       try {
         const result = await authService.login(this.email, this.password);
         this.getProfile(result.data.profile);
+        axios.defaults.headers.common["auth-token"] = result.data.profile.token;
+
         this.$router.push("/");
       } catch (error) {
         console.log(error);

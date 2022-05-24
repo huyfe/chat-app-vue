@@ -99,7 +99,7 @@
         >
           <div class="messenger-item__avatar mr-3 relative">
             <img
-              :src="messenger.avatar"
+              :src="messenger.avatar || require('@/assets/images/avatar.png')"
               alt="user"
               class="rounded-full min-w-[44px] h-[44px] object-cover"
             />
@@ -108,13 +108,14 @@
               class="absolute top-0 right-0"
             />
             <IconOnline
-              v-if="messenger.status === messengerStatus.ONLINE"
+              v-else-if="messenger.status === messengerStatus.ONLINE"
               class="absolute top-0 right-0"
             />
             <IconWorking
-              v-if="messenger.status === messengerStatus.WORKING"
+              v-else-if="messenger.status === messengerStatus.WORKING"
               class="absolute top-0 right-0"
             />
+            <IconWorking v-else class="absolute top-0 right-0" />
           </div>
           <div class="messenger-item__name w-full overflow-hidden">
             <h3
@@ -231,6 +232,8 @@ import IconLookup from "./icons/IconLookup.vue";
 import MessengerStatus from "../const/MessengerStatus";
 
 import { mapGetters } from "vuex";
+
+import { userService } from "@/services/user";
 
 export default {
   components: {
@@ -357,6 +360,16 @@ export default {
     ...mapGetters("client", {
       profile: "clientProfile",
     }),
+  },
+  async mounted() {
+    await userService
+      .getAll()
+      .then((response) => {
+        this.messengerList = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 </script>

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 // import Home from '@/components/Home.vue'
-import Messenger from '@/components/Messenger.vue';
+import BoxChat from '@/components/BoxChat.vue';
 import Main from '@/components/Main.vue';
 import Error from '@/components/Error.vue';
 import Login from '@/components/Login.vue';
@@ -30,7 +30,7 @@ const routes = [
     },
     {
         path: '/:name',
-        component: Messenger,
+        component: BoxChat,
         meta: {
             requiresAuth: true
         }
