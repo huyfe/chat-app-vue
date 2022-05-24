@@ -106,11 +106,9 @@ export default {
     async login() {
       try {
         const result = await authService.login(this.email, this.password);
-        console.log(result.data.profile);
         this.getProfile(result.data.profile);
         this.$router.push("/");
       } catch (error) {
-        // console.log(error.response.data);
         console.log(error);
       }
     },

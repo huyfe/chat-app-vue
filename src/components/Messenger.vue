@@ -199,6 +199,7 @@ import IconSend from "./icons/IconSend.vue";
 import IconAttachment from "./icons/IconAttachment.vue";
 import IconVoice from "./icons/IconVoice.vue";
 import MenuLeft from "./MenuLeft.vue";
+import { postService } from "@/services/post";
 
 export default {
   components: {
@@ -302,8 +303,32 @@ export default {
       profile: "clientProfile",
     }),
   },
-  mounted() {
-    console.log(this.chatBox);
+  async mounted() {
+    await postService
+      .find()
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+  created() {
+    this.$watch(
+      () => this.$route.params,
+      async (toParams, previousParams) => {
+        // react to route changes...
+        console.log(this.chatBox);
+        await this.axios
+          .get("http://localhost:3000/api/posts")
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    );
   },
 };
 </script>

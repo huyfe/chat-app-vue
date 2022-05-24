@@ -1,5 +1,5 @@
 import MessengerStatus from '@/const/MessengerStatus';
-import { setCookie, getCookie } from '@/helpers/common.js';
+import { setCookie, getCookie, checkCookie } from '@/helpers/common.js';
 
 // initial state
 const state = () => ({
@@ -16,15 +16,7 @@ const getters = {
 // actions
 const actions = {
     getProfile({ commit }, data) {
-        // const profile = {
-        //     id: 'me123',
-        //     avatar: require('@/assets/images/user.png'),
-        //     firstName: 'Mehmet',
-        //     lastName: 'Revnaki',
-        //     status: MessengerStatus.WORKING,
-        // }
         const profile = data;
-
         commit('setProfile', profile);
     }
 }
@@ -33,7 +25,10 @@ const actions = {
 const mutations = {
     setProfile(state, profile) {
         state.profile = profile;
-        setCookie("token", profile.token, 1);
+        console.log("Check cookie", checkCookie());
+        if (!checkCookie()) {
+            setCookie("token", profile.token, 1);
+        }
     }
 }
 

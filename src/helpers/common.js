@@ -23,11 +23,13 @@ export function getCookie(token) {
     return "";
 }
 
-export async function checkCookie() {
+export function checkCookie() {
     let token = getCookie("token");
     try {
-        const validToken = await authService.profile(token);
-        return validToken.data.profile;
+        if (!token) {
+            throw new Error("Token is not exist")
+        }
+        return true;
     }
     catch (err) {
         return false;

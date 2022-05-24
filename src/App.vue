@@ -8,7 +8,7 @@
 import MenuLeft from "./components/MenuLeft.vue";
 import Main from "./components/Main.vue";
 import { mapGetters, mapActions } from "vuex";
-import { checkCookie } from "@/helpers/common";
+import { checkCookie, getCookie } from "@/helpers/common";
 import { authService } from "./services/auth";
 
 export default {
@@ -23,12 +23,16 @@ export default {
     }),
   },
   async beforeMount() {
-    // this.getProfile();
-    // console.log(this.profile);
     const isLoggedIn = await checkCookie();
+    const token = getCookie("token");
     console.log(isLoggedIn);
     if (isLoggedIn) {
-      this.getProfile(isLoggedIn);
+      const result = await authService.profile(token);
+      if (!result) {
+        this.$router.push("/login");
+        return;
+      }
+      this.getProfile(result.data.profile);
     }
   },
   methods: {
