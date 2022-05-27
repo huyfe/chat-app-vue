@@ -92,15 +92,21 @@
       </div>
       <!-- End chat box date -->
       <div
-        v-for="(item, index) in chatBox.chatData"
+        v-for="(item, index) in chatBox.messagesData"
         :key="`key_chat_box_${index}`"
         class="chat-box__item"
         :class="
-          profile.id !== item.id ? 'chat-box__item--you' : 'chat-box__item--me'
+          profile.id !== item.idUser
+            ? 'chat-box__item--you'
+            : 'chat-box__item--me'
         "
       >
         <div class="chat-box__item__name">
-          {{ `${item.firstName} ${item.lastName}` }}
+          <!-- {{ `${item.firstName} ${item.lastName}` }} -->
+          {{
+            chatBox.members.find((member) => member.idMember === item.idUser)
+              .fullName
+          }}
         </div>
         <div class="chat-box__item__avatar-messages">
           <div class="chat-box__item__avatar">
@@ -221,7 +227,7 @@ import IconAttachment from "./icons/IconAttachment.vue";
 import IconVoice from "./icons/IconVoice.vue";
 import MenuLeft from "./MenuLeft.vue";
 import { userService } from "@/services/user";
-import { boxChat } from "@/fakeBoxChat";
+import { room } from "@/fakeRoom";
 import { deleteCookie } from "@/helpers/common";
 
 export default {
@@ -235,9 +241,9 @@ export default {
     MenuLeft,
   },
   setup() {
-    const chatBox = ref(boxChat);
+    const chatBox = ref(room);
     const friend = ref({
-      id: 0,
+      idUser: 0,
       firstName: "Phillip",
       lastName: "Torff",
       slug: "phillip-torff",

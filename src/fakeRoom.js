@@ -1,14 +1,27 @@
-export const boxChat = {
+export const room = {
     id: "adsd",
+    name: "Tran Quoc Huy",
+    slug: "tran-quoc-huy",
     type: "1vs1",
     createdAt: new Date(),
     updatedAt: new Date(),
-    chatData: [
+    members: [
         {
-            id: "you123",
+            idMember: "you123",
             avatar: require("@/assets/images/messenger-1.png"),
-            firstName: "Phillip",
-            lastName: "Torff",
+            fullName: "Phillip",
+            slug: "phillip",
+        },
+        {
+            idMember: "6291056455a29ebc13a050ed",
+            avatar: require("@/assets/images/user.png"),
+            fullName: "Mehmet",
+            slug: "mehmet",
+        }
+    ],
+    messagesData: [
+        {
+            idUser: "you123",
             messages: [
                 {
                     text: "Hello m8!",
@@ -23,10 +36,7 @@ export const boxChat = {
             ],
         },
         {
-            id: "me123",
-            avatar: require("@/assets/images/user.png"),
-            firstName: "Mehmet",
-            lastName: "Revnaki",
+            idUser: "6291056455a29ebc13a050ed",
             messages: [
                 {
                     text: "Thank you Phillip!",
@@ -36,10 +46,7 @@ export const boxChat = {
             ],
         },
         {
-            id: "you123",
-            avatar: require("@/assets/images/messenger-1.png"),
-            firstName: "Phillip",
-            lastName: "Torff",
+            idUser: "you123",
             messages: [
                 {
                     text: "Hello m8!",
@@ -54,10 +61,7 @@ export const boxChat = {
             ],
         },
         {
-            id: "you123",
-            avatar: require("@/assets/images/messenger-1.png"),
-            firstName: "Phillip",
-            lastName: "Torff",
+            idUser: "you123",
             messages: [
                 {
                     text: "Hello m8!",

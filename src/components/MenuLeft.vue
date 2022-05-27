@@ -80,8 +80,8 @@
       "
     >
       <router-link
-        v-for="messenger in messengerList"
-        :key="`key_mess_${messenger.id}`"
+        v-for="messenger in roomList"
+        :key="`key_mess_${messenger.slug}`"
         :to="`/${messenger.slug}`"
         class="group group--messenger-item cursor-pointer"
       >
@@ -137,7 +137,7 @@
                   group-hover:text-white
                   duration-100
                 "
-                >{{ messenger.lastTime || "17/06/2020" }}</span
+                >{{ formatDate(messenger.lastTime) || "17/06/2020" }}</span
               >
             </h3>
             <div class="flex">
@@ -152,7 +152,7 @@
                   duration-100
                 "
               >
-                {{ messenger.lastMessage || "Last message" }}
+                {{ messenger.lastText || "Last text" }}
               </p>
               <div
                 class="
@@ -234,6 +234,8 @@ import MessengerStatus from "../const/MessengerStatus";
 import { mapGetters } from "vuex";
 
 import { userService } from "@/services/user";
+import { roomService } from "@/services/room";
+import moment from "moment";
 
 export default {
   components: {
@@ -351,6 +353,7 @@ export default {
           avatarColor: "",
         },
       ],
+      roomList: [],
     };
   },
   computed: {
@@ -360,16 +363,38 @@ export default {
     ...mapGetters("client", {
       profile: "clientProfile",
     }),
+    moment() {
+      return moment;
+    },
   },
   async mounted() {
-    await userService
-      .getAll()
+    // await userService
+    //   .getAll()
+    //   .then((response) => {
+    //     this.messengerList = response.data;
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+
+    await roomService
+      .getRoomList()
       .then((response) => {
-        this.messengerList = response.data;
+        const isSuccess = response.data;
+        if (!isSuccess) {
+          throw new Error("Something went wrong");
+        }
+        this.roomList = response.data;
+        console.log(response);
       })
       .catch((error) => {
         console.log(error);
       });
+  },
+  methods: {
+    formatDate(date) {
+      return moment(date).format("DD/MM/YYYY");
+    },
   },
 };
 </script>
