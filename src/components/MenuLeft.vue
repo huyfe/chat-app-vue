@@ -82,7 +82,7 @@
       <router-link
         v-for="messenger in roomList"
         :key="`key_mess_${messenger.slug}`"
-        :to="`/rooms/${messenger.slug}`"
+        :to="`/rooms/${messenger.id}`"
         class="group group--messenger-item cursor-pointer"
       >
         <div

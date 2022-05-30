@@ -241,8 +241,8 @@ export default {
     const store = useStore();
     const firstMessageDate = ref("");
 
-    const getRoomDetailDataBySlug = async (slug) => {
-      await roomService.detail(slug).then((response) => {
+    const getRoomDetailDataByID = async (id) => {
+      await roomService.detail(id).then((response) => {
         room.value = response.data;
         friend.value = response.data.members.find(
           (member) => member.idMember !== store.state.client.profile.id
@@ -251,7 +251,6 @@ export default {
           response.data.messagesData[0].messages[0].time,
           "DD/MM/YYYY"
         );
-        console.log(store.state.client.profile);
       });
     };
 
@@ -259,12 +258,12 @@ export default {
       return moment(date).format(format);
     };
 
-    watch(route.params.slug, () => {
-      getRoomDetailDataBySlug(route.params.slug);
+    watch(route.params.id, () => {
+      getRoomDetailDataByID(route.params.id);
     });
 
     onMounted(async () => {
-      await getRoomDetailDataBySlug(route.params.slug);
+      await getRoomDetailDataByID(route.params.id);
     });
 
     return { room, friend, firstMessageDate, formatDateToTime };
