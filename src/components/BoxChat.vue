@@ -123,7 +123,7 @@
     <!-- Start chat box controls -->
     <div class="chat-box__controls mt-8">
       <div>
-        <form @submit.prevent class="relative">
+        <form @submit.prevent="sendMessage" class="relative">
           <div
             class="
               chat-box__controls__list
@@ -139,6 +139,7 @@
             <IconVoice />
           </div>
           <input
+            v-model="textMessage"
             class="
               block
               w-full
@@ -240,6 +241,7 @@ export default {
     const friend = ref({});
     const store = useStore();
     const firstMessageDate = ref("");
+    const textMessage = ref("");
 
     const getRoomDetailDataByID = async (id) => {
       await roomService.detail(id).then((response) => {
@@ -266,7 +268,7 @@ export default {
       await getRoomDetailDataByID(route.params.id);
     });
 
-    return { room, friend, firstMessageDate, formatDateToTime };
+    return { room, friend, firstMessageDate, textMessage, formatDateToTime };
   },
   computed: {
     messengerStatus() {
@@ -280,6 +282,60 @@ export default {
     logout() {
       deleteCookie("token");
       this.$router.push("/login");
+    },
+    sendMessage() {
+      // Nếu tin nhắn cuối cùng là của mình và thời gian của tin nhắn cuối cùng so sánh với
+      // thời gian hiện tại không quá 5 phút thì sẽ push tin nhắn vào property messages (room.messagesData.messages)
+      const lastMessagesData =
+        this.room.messagesData[this.room.messagesData.length - 1];
+      const lastMessage =
+        lastMessagesData.messages[lastMessagesData.messages.length - 1];
+
+      // Get time of text message and compare with current time
+      var date1 = moment(lastMessage.time);
+      var date2 = moment(new Date());
+      const differenceInMs = date2.diff(date1); // diff yields milliseconds
+      const duration = moment.duration(differenceInMs); // moment.duration accepts ms
+      const differenceInMinutes = duration.asMinutes(); // if you would like to have the output 559
+      const minuteLimit = 5; // Limit 5 minutes
+
+      if (
+        lastMessagesData.idUser === this.profile.id &&
+        !lastMessage.isReply &&
+        differenceInMinutes > minuteLimit
+      ) {
+        // Create messageData data to push into room.messagesData array
+        const messageData = {
+          idUser: this.profile.id,
+          messages: [
+            {
+              text: this.textMessage,
+              time: new Date(),
+              isReply: false,
+            },
+          ],
+        };
+
+        // Push new messageData into room.messagesData array
+        this.room.messagesData.push(messageData);
+        return;
+      }
+
+      // Create textMessage data to push into room.messagesData.messages array
+      const textMessage = {
+        text: this.textMessage,
+        time: new Date(),
+        isReply: false,
+      };
+      this.room.messagesData[this.room.messagesData.length - 1].messages.push(
+        textMessage
+      );
+
+      // Scroll to bottom every messages was pushed
+      setTimeout(() => {
+        const chatBoxListElement = document.querySelector(".chat-box__list");
+        chatBoxListElement.scrollTop = chatBoxListElement.scrollHeight;
+      }, 0);
     },
   },
 };

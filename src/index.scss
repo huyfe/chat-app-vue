@@ -28,7 +28,7 @@
       }
     }
     &__message {
-      @apply w-fit mt-2 first:mt-0 bg-blue-light rounded rounded-tl-none px-4 py-3 text-sm;
+      @apply w-fit mt-2 first:mt-0 bg-blue-light rounded px-4 py-3 text-sm;
     }
     &__text {
       @apply min-w-[150px] max-w-[505px];
@@ -40,6 +40,9 @@
     // For message from friend
     &--you {
       @apply mr-auto;
+      .chat-box__item__message {
+        @apply rounded-tl-none;
+      }
     }
 
     // For message from me
@@ -52,7 +55,7 @@
         @apply flex-row-reverse;
       }
       .chat-box__item__message {
-        @apply bg-orange text-white;
+        @apply bg-orange text-white rounded-tr-none ml-auto;
       }
       .chat-box__item__text {
         @apply min-w-fit;
