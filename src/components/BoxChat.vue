@@ -1,21 +1,9 @@
 <template>
   <MenuLeft />
 
-  <div
-    class="
-      chat-box
-      w-[calc(100%
-      -
-      320px
-      -350px)]
-      flex flex-col
-      justify-end
-      p-6
-      pt-0
-    "
-  >
+  <div class="chat-box w-1/2 flex flex-col justify-end p-6 pt-0">
     <!-- Start chat box message list -->
-    <div class="chat-box__head -ml-6 shadow-md px-6">
+    <div class="chat-box__head mb-auto -ml-6 shadow-md px-6">
       <div
         class="
           friend
@@ -31,7 +19,7 @@
       >
         <div class="messenger-item__avatar mr-3 relative">
           <img
-            :src="friend.avatar"
+            :src="friend.avatar || require('@/assets/images/avatar.png')"
             alt="user"
             class="rounded-full min-w-[44px] h-[44px] object-cover"
           />
@@ -60,8 +48,7 @@
               duration-100
             "
           >
-            <!-- <span>{{ friend.firstName + " " + friend.lastName }}</span> -->
-            <span>{{ $route.params.name }}</span>
+            <span>{{ friend.fullName }}</span>
           </h3>
           <div class="flex">
             <p
@@ -86,13 +73,13 @@
     <div class="chat-box__list overflow-auto pr-6">
       <!-- Start chat box date -->
       <div class="chat-box-date flex justify-center mb-7 mt-4">
-        <span class="block py-1 px-5 bg-blue-dark rounded text-sm text-white"
-          >17/06/2020</span
-        >
+        <span class="block py-1 px-5 bg-blue-dark rounded text-sm text-white">{{
+          firstMessageDate || "First Date"
+        }}</span>
       </div>
       <!-- End chat box date -->
       <div
-        v-for="(item, index) in chatBox.messagesData"
+        v-for="(item, index) in room.messagesData"
         :key="`key_chat_box_${index}`"
         class="chat-box__item"
         :class="
@@ -104,7 +91,7 @@
         <div class="chat-box__item__name">
           <!-- {{ `${item.firstName} ${item.lastName}` }} -->
           {{
-            chatBox.members.find((member) => member.idMember === item.idUser)
+            room.members.find((member) => member.idMember === item.idUser)
               .fullName
           }}
         </div>
@@ -123,7 +110,9 @@
               class="chat-box__item__message"
             >
               <p class="chat-box__item__text break-word">{{ message.text }}</p>
-              <p class="chat-box__item__time">{{ message.time }}</p>
+              <p class="chat-box__item__time">
+                {{ formatDateToTime(message.time, "h:mm") }}
+              </p>
             </div>
           </div>
         </div>
@@ -217,7 +206,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { ref } from "vue";
+import { ref, reactive, onMounted, watch, computed } from "vue";
 import MessengerStatus from "../const/MessengerStatus";
 import IconOnline from "./icons/IconOnline.vue";
 import IconOffline from "./icons/IconOffline.vue";
@@ -229,6 +218,10 @@ import MenuLeft from "./MenuLeft.vue";
 import { userService } from "@/services/user";
 import { room } from "@/fakeRoom";
 import { deleteCookie } from "@/helpers/common";
+import { roomService } from "@/services/room";
+import { useRoute } from "vue-router";
+import moment from "moment";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -241,20 +234,40 @@ export default {
     MenuLeft,
   },
   setup() {
-    const chatBox = ref(room);
-    const friend = ref({
-      idUser: 0,
-      firstName: "Phillip",
-      lastName: "Torff",
-      slug: "phillip-torff",
-      gender: "male",
-      offlineAt: new Date() || "",
-      lastMessage: "Thank you Phillip!",
-      status: "offline",
-      avatar: require("@/assets/images/messenger-1.png"),
-      avatarColor: "",
+    // const chatBox = ref(room);
+    const route = useRoute();
+    const room = ref({});
+    const friend = ref({});
+    const store = useStore();
+    const firstMessageDate = ref("");
+
+    const getRoomDetailDataBySlug = async (slug) => {
+      await roomService.detail(slug).then((response) => {
+        room.value = response.data;
+        friend.value = response.data.members.find(
+          (member) => member.idMember !== store.state.client.profile.id
+        );
+        firstMessageDate.value = formatDateToTime(
+          response.data.messagesData[0].messages[0].time,
+          "DD/MM/YYYY"
+        );
+        console.log(store.state.client.profile);
+      });
+    };
+
+    const formatDateToTime = (date, format) => {
+      return moment(date).format(format);
+    };
+
+    watch(route.params.slug, () => {
+      getRoomDetailDataBySlug(route.params.slug);
     });
-    return { chatBox, friend };
+
+    onMounted(async () => {
+      await getRoomDetailDataBySlug(route.params.slug);
+    });
+
+    return { room, friend, firstMessageDate, formatDateToTime };
   },
   computed: {
     messengerStatus() {

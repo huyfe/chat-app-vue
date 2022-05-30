@@ -29,7 +29,7 @@ const routes = [
         component: Register
     },
     {
-        path: '/:name',
+        path: '/rooms/:slug',
         component: BoxChat,
         meta: {
             requiresAuth: true
