@@ -111,8 +111,20 @@ export default {
         axios.defaults.headers.common["auth-token"] = result.data.profile.token;
 
         this.$router.push("/");
+
+        this.$notify({
+          duration: 1000,
+          type: "success",
+          title: "Success",
+          text: "Login successfully",
+        });
       } catch (error) {
         console.log(error);
+        this.$notify({
+          type: "error",
+          title: "Error",
+          text: error.response ? error.response.data : "Something went wrong",
+        });
       }
     },
   },

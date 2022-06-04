@@ -94,7 +94,7 @@
             p-3
             group-hover:bg-blue-dark group-hover:shadow-blue-dark
             rounded
-            duration-100
+            duration-300
           "
         >
           <div class="messenger-item__avatar mr-3 relative">

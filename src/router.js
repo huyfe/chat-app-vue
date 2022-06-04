@@ -51,7 +51,7 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     // canUserAccess() returns `true` or `false`
     const canAccess = await checkCookie();
-    console.log(canAccess);
+    console.log("Can access in router.js: ", canAccess);
     if (to.meta.requiresAuth && !canAccess) {
         // this route requires auth, check if logged in
         // if not, redirect to login page.

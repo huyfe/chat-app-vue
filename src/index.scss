@@ -34,7 +34,16 @@
       @apply min-w-[150px] max-w-[505px];
     }
     &__time {
-      @apply text-blue-dark text-right text-xs opacity-60 mt-1;
+      @apply text-right relative w-fit ml-auto;
+      span {
+        @apply text-blue-dark  text-xs opacity-60 mt-1;
+      }
+      &:hover {
+        .tooltip {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
     }
 
     // For message from friend

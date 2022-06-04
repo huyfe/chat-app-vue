@@ -89,3 +89,107 @@
 .wrapper {
     background: linear-gradient(107.56deg, #ffffff 0%, #f2f6f7 100%);
 }
+
+/* 
+* Custom css vue notification
+*/
+.vue-notification-group {
+    top: 20px !important;
+    right: 20px !important;
+    .vue-notification-wrapper {
+        overflow: visible;
+        .vue-notification-template {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            background: $white;
+            color: $dark;
+            padding: 20px;
+
+            .notification-title {
+            }
+        }
+
+        .vue-notification {
+            font-family: $font-primary;
+            font-size: 14px;
+
+            &.error {
+                .notification-title {
+                    position: relative;
+                    color: $red;
+                    padding-left: 32px;
+                    margin-bottom: 10px;
+                    &::before {
+                        width: 20px;
+                        height: 20px;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        content: "";
+                        background-image: url("./assets/images/error.png");
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: cover;
+                    }
+                }
+            }
+            &.success {
+                .notification-title {
+                    position: relative;
+                    color: $green;
+                    padding-left: 32px;
+                    margin-bottom: 10px;
+                    &::before {
+                        width: 20px;
+                        height: 20px;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        content: "";
+                        background-image: url("./assets/images/success.png");
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: cover;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.vn-fade-enter-to {
+    animation: moveFromRight 0.5s ease-out;
+}
+@keyframes moveFromRight {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.vn-fade-leave-to {
+    animation: moveFromLeft 0.5s ease-out;
+}
+@keyframes moveFromLeft {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s;
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

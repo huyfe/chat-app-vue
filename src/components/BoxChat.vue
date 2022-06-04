@@ -1,7 +1,7 @@
-<template>
+<template >
   <MenuLeft />
 
-  <div class="chat-box w-1/2 flex flex-col justify-end p-6 pt-0">
+  <div class="chat-box w-1/2 flex flex-col justify-end p-6 pt-0 fade-in">
     <!-- Start chat box message list -->
     <div class="chat-box__head mb-auto -ml-6 shadow-md px-6">
       <div
@@ -109,9 +109,14 @@
               :key="`key_chat_box_message_${messageIndex}`"
               class="chat-box__item__message"
             >
-              <p class="chat-box__item__text break-word">{{ message.text }}</p>
-              <p class="chat-box__item__time">
-                {{ formatDateToTime(message.time, "h:mm") }}
+              <p class="chat-box__item__text break-word">
+                {{ message.text }}
+              </p>
+              <p class="chat-box__item__time position-relative">
+                <Tooltip
+                  :title="formatDateToTime(message.time, 'DD/MM/YYYY h:mm:ss')"
+                />
+                <span>{{ formatDateToTime(message.time, "h:mm") }}</span>
               </p>
             </div>
           </div>
@@ -182,6 +187,7 @@
     </div>
     <!-- End chat box controls -->
   </div>
+
   <aside class="aside-right flex-1 px-[15px]">
     <button
       class="
@@ -223,6 +229,7 @@ import { roomService } from "@/services/room";
 import { useRoute } from "vue-router";
 import moment from "moment";
 import { useStore } from "vuex";
+import Tooltip from "./Tooltip.vue";
 
 export default {
   components: {
@@ -233,6 +240,7 @@ export default {
     IconAttachment,
     IconVoice,
     MenuLeft,
+    Tooltip,
   },
   setup() {
     // const chatBox = ref(room);
@@ -299,11 +307,36 @@ export default {
       const differenceInMinutes = duration.asMinutes(); // if you would like to have the output 559
       const minuteLimit = 5; // Limit 5 minutes
 
-      if (
-        lastMessagesData.idUser === this.profile.id &&
-        !lastMessage.isReply &&
-        differenceInMinutes > minuteLimit
-      ) {
+      if (lastMessagesData.idUser === this.profile.id) {
+        if (differenceInMinutes > minuteLimit) {
+          // Create messageData data to push into room.messagesData array
+          const messageData = {
+            idUser: this.profile.id,
+            messages: [
+              {
+                text: this.textMessage,
+                time: new Date(),
+                isReply: false,
+              },
+            ],
+          };
+
+          // Push new messageData into room.messagesData array
+          this.room.messagesData.push(messageData);
+        } else {
+          // Create textMessage data to push into room.messagesData.messages array
+          const textMessage = {
+            text: this.textMessage,
+            time: new Date(),
+            isReply: false,
+          };
+          this.room.messagesData[
+            this.room.messagesData.length - 1
+          ].messages.push(textMessage);
+        }
+      }
+
+      if (lastMessagesData.idUser !== this.profile.id) {
         // Create messageData data to push into room.messagesData array
         const messageData = {
           idUser: this.profile.id,
@@ -318,23 +351,13 @@ export default {
 
         // Push new messageData into room.messagesData array
         this.room.messagesData.push(messageData);
-        return;
       }
-
-      // Create textMessage data to push into room.messagesData.messages array
-      const textMessage = {
-        text: this.textMessage,
-        time: new Date(),
-        isReply: false,
-      };
-      this.room.messagesData[this.room.messagesData.length - 1].messages.push(
-        textMessage
-      );
 
       // Scroll to bottom every messages was pushed
       setTimeout(() => {
         const chatBoxListElement = document.querySelector(".chat-box__list");
         chatBoxListElement.scrollTop = chatBoxListElement.scrollHeight;
+        this.textMessage = "";
       }, 0);
     },
   },

@@ -1,7 +1,11 @@
 <template>
   <div class="wrapper flex h-[100vh]">
-    <router-view />
+    <!-- <router-view /> -->
+    <transition name="fade">
+      <router-view class="view" />
+    </transition>
   </div>
+  <notifications />
 </template>
 
 <script>
@@ -25,7 +29,7 @@ export default {
   async beforeMount() {
     const isLoggedIn = await checkCookie();
     const token = getCookie("token");
-    console.log(isLoggedIn);
+    console.log("Is logged in in App.vue: ", isLoggedIn);
     if (isLoggedIn) {
       const result = await authService.profile(token);
       if (!result) {
