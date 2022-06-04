@@ -1,9 +1,32 @@
 <template>
+  <header id="header" class="mt-[-10px] fixed top-0 right-0 p-[20px] z-10">
+    <button
+      class="
+        w-[108px]
+        h-[40px]
+        bg-blue-dark
+        text-white-fade text-sm
+        hover:bg-orange
+        rounded
+        flex
+        items-center
+        justify-center
+        duration-200
+        mt-[10px]
+        ml-auto
+      "
+      @click.prevent="logout()"
+    >
+      <img
+        class="w-[20px] mr-2"
+        :src="require('./assets/images/exit.png')"
+        alt=""
+      />
+      Log out
+    </button>
+  </header>
   <div class="wrapper flex h-[100vh]">
-    <!-- <router-view /> -->
-    <transition name="fade">
-      <router-view class="view" />
-    </transition>
+    <router-view />
   </div>
   <notifications />
 </template>
@@ -14,6 +37,7 @@ import Main from "./components/Main.vue";
 import { mapGetters, mapActions } from "vuex";
 import { checkCookie, getCookie } from "@/helpers/common";
 import { authService } from "./services/auth";
+import { deleteCookie } from "@/helpers/common";
 
 export default {
   name: "App",
@@ -41,6 +65,10 @@ export default {
   },
   methods: {
     ...mapActions("client", ["getProfile"]),
+    logout() {
+      deleteCookie("token");
+      this.$router.push("/login");
+    },
   },
 };
 </script>

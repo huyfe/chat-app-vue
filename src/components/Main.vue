@@ -10,10 +10,17 @@
 
 <script>
 import MenuLeft from "./MenuLeft.vue";
+import { deleteCookie } from "@/helpers/common";
 
 export default {
   components: {
     MenuLeft,
+  },
+  methods: {
+    logout() {
+      deleteCookie("token");
+      this.$router.push("/login");
+    },
   },
 };
 </script>

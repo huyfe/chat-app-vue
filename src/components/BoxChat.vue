@@ -188,27 +188,7 @@
     <!-- End chat box controls -->
   </div>
 
-  <aside class="aside-right flex-1 px-[15px]">
-    <button
-      class="
-        w-[108px]
-        h-[40px]
-        bg-blue-dark
-        text-white-fade text-sm
-        hover:bg-orange
-        rounded
-        flex
-        items-center
-        justify-center
-        duration-200
-        mt-[10px]
-        ml-auto
-      "
-      @click.prevent="logout()"
-    >
-      Log out
-    </button>
-  </aside>
+  <aside class="aside-right flex-1 px-[15px]"></aside>
 </template>
 
 <script>
@@ -223,8 +203,6 @@ import IconAttachment from "./icons/IconAttachment.vue";
 import IconVoice from "./icons/IconVoice.vue";
 import MenuLeft from "./MenuLeft.vue";
 import { userService } from "@/services/user";
-import { room } from "@/fakeRoom";
-import { deleteCookie } from "@/helpers/common";
 import { roomService } from "@/services/room";
 import { useRoute } from "vue-router";
 import moment from "moment";
@@ -274,6 +252,12 @@ export default {
 
     onMounted(async () => {
       await getRoomDetailDataByID(route.params.id);
+      setTimeout(() => {
+        console.log("RUNNN");
+        const chatBoxListElement = document.querySelector(".chat-box__list");
+        chatBoxListElement.scrollTop = chatBoxListElement.scrollHeight;
+        console.log(chatBoxListElement.scrollHeight);
+      }, 0);
     });
 
     return { room, friend, firstMessageDate, textMessage, formatDateToTime };
@@ -286,78 +270,37 @@ export default {
       profile: "clientProfile",
     }),
   },
+
   methods: {
-    logout() {
-      deleteCookie("token");
-      this.$router.push("/login");
-    },
-    sendMessage() {
-      // Nếu tin nhắn cuối cùng là của mình và thời gian của tin nhắn cuối cùng so sánh với
-      // thời gian hiện tại không quá 5 phút thì sẽ push tin nhắn vào property messages (room.messagesData.messages)
-      const lastMessagesData =
-        this.room.messagesData[this.room.messagesData.length - 1];
-      const lastMessage =
-        lastMessagesData.messages[lastMessagesData.messages.length - 1];
-
-      // Get time of text message and compare with current time
-      var date1 = moment(lastMessage.time);
-      var date2 = moment(new Date());
-      const differenceInMs = date2.diff(date1); // diff yields milliseconds
-      const duration = moment.duration(differenceInMs); // moment.duration accepts ms
-      const differenceInMinutes = duration.asMinutes(); // if you would like to have the output 559
-      const minuteLimit = 5; // Limit 5 minutes
-
-      if (lastMessagesData.idUser === this.profile.id) {
-        if (differenceInMinutes > minuteLimit) {
-          // Create messageData data to push into room.messagesData array
-          const messageData = {
-            idUser: this.profile.id,
-            messages: [
-              {
-                text: this.textMessage,
-                time: new Date(),
-                isReply: false,
-              },
-            ],
-          };
-
-          // Push new messageData into room.messagesData array
-          this.room.messagesData.push(messageData);
-        } else {
-          // Create textMessage data to push into room.messagesData.messages array
-          const textMessage = {
-            text: this.textMessage,
-            time: new Date(),
-            isReply: false,
-          };
-          this.room.messagesData[
-            this.room.messagesData.length - 1
-          ].messages.push(textMessage);
+    async sendMessage() {
+      // Send text to server
+      try {
+        const result = await roomService.postMessage(
+          this.room._id,
+          this.textMessage
+        );
+        if (!result) {
+          throw new Error("Something went wrong");
         }
-      }
-
-      if (lastMessagesData.idUser !== this.profile.id) {
-        // Create messageData data to push into room.messagesData array
-        const messageData = {
-          idUser: this.profile.id,
-          messages: [
-            {
-              text: this.textMessage,
-              time: new Date(),
-              isReply: false,
-            },
-          ],
-        };
-
-        // Push new messageData into room.messagesData array
-        this.room.messagesData.push(messageData);
+        this.room.messagesData = result.data;
+      } catch (error) {
+        this.$notify({
+          type: "error",
+          title: "Error",
+          text: error.response ? error.response.data : "Something went wrong",
+        });
       }
 
       // Scroll to bottom every messages was pushed
+      this.scrollToBottomChatBox();
+      this.textMessage = "";
+    },
+    scrollToBottomChatBox() {
       setTimeout(() => {
+        console.log("RUNNN");
         const chatBoxListElement = document.querySelector(".chat-box__list");
         chatBoxListElement.scrollTop = chatBoxListElement.scrollHeight;
-        this.textMessage = "";
+        console.log(chatBoxListElement.scrollHeight);
       }, 0);
     },
   },

@@ -151,6 +151,10 @@
                   truncate
                   duration-100
                 "
+                :class="{
+                  'text-orange font-medium':
+                    !messenger.isRead && messenger.idUser !== profile.id,
+                }"
               >
                 {{ messenger.lastText || "Last text" }}
               </p>
