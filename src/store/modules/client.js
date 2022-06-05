@@ -25,7 +25,7 @@ const actions = {
 const mutations = {
     setProfile(state, profile) {
         state.profile = profile;
-        console.log("Check cookie", checkCookie());
+        // console.log("Check cookie", checkCookie());
         if (!checkCookie()) {
             setCookie("token", profile.token, 1);
         }

@@ -240,8 +240,10 @@ import { mapGetters } from "vuex";
 import { userService } from "@/services/user";
 import { roomService } from "@/services/room";
 import moment from "moment";
-
+// import { socket } from "@/helpers/socket";
 export default {
+  name: "MenuLeft",
+
   components: {
     IconCaretDown,
     IconAction,
@@ -253,6 +255,17 @@ export default {
     IconGroups,
     IconStar,
     IconLookup,
+  },
+  sockets: {
+    connect: function () {
+      console.log("socket connected");
+    },
+    usersOnline: function (data) {
+      console.log(
+        'this method was fired by the socket server. eg: io.emit("customEmit", data): ',
+        data
+      );
+    },
   },
   data() {
     return {
@@ -371,6 +384,12 @@ export default {
       return moment;
     },
   },
+  beforeMount() {
+    // Listening channel users online
+    // socket.on("users online", (list) => {
+    //   console.log("List users online: ", list);
+    // });
+  },
   async mounted() {
     // await userService
     //   .getAll()
@@ -389,7 +408,7 @@ export default {
           throw new Error("Something went wrong");
         }
         this.roomList = response.data;
-        console.log(response);
+        // console.log(response);
       })
       .catch((error) => {
         console.log(error);

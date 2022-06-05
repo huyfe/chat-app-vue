@@ -89,6 +89,7 @@ import { ref } from "vue";
 import { mapActions } from "vuex";
 import { authService } from "@/services/auth";
 import { checkCookie } from "@/helpers/common";
+// import { socket } from "@/helpers/socket";
 import axios from "axios";
 
 export default {
@@ -101,7 +102,6 @@ export default {
     };
   },
   async beforeMount() {},
-
   methods: {
     ...mapActions("client", ["getProfile"]),
     async login() {
@@ -118,6 +118,7 @@ export default {
           title: "Success",
           text: "Login successfully",
         });
+        this.$socket.emit("usersOnline", result.data.profile.id);
       } catch (error) {
         console.log(error);
         this.$notify({

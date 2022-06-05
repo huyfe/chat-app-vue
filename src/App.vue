@@ -38,9 +38,22 @@ import { mapGetters, mapActions } from "vuex";
 import { checkCookie, getCookie } from "@/helpers/common";
 import { authService } from "./services/auth";
 import { deleteCookie } from "@/helpers/common";
+// import { io } from "socket.io-client";
+// import { socket } from "@/helpers/socket";
 
 export default {
   name: "App",
+  sockets: {
+    connect: function () {
+      console.log("socket connected");
+    },
+    general: function (data) {
+      console.log(
+        'this method was fired by the socket server. eg: io.emit("customEmit", data): ',
+        data
+      );
+    },
+  },
   components: {
     MenuLeft,
     Main,
@@ -50,10 +63,10 @@ export default {
       profile: "clientProfile",
     }),
   },
-  async beforeMount() {
+  async mounted() {
     const isLoggedIn = await checkCookie();
     const token = getCookie("token");
-    console.log("Is logged in in App.vue: ", isLoggedIn);
+    // console.log("Is logged in in App.vue: ", isLoggedIn);
     if (isLoggedIn) {
       const result = await authService.profile(token);
       if (!result) {
@@ -61,6 +74,7 @@ export default {
         return;
       }
       this.getProfile(result.data.profile);
+      this.$socket.emit("usersOnline", result.data.profile.id);
     }
   },
   methods: {
