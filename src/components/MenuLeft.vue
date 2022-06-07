@@ -1,5 +1,8 @@
-<template>
-  <aside class="menu-left w-70">
+<template >
+  <aside
+    v-if="profile && Object.keys(profile).length !== 0"
+    class="menu-left min-w-[350px]"
+  >
     <!-- Start Main User Header -->
     <div
       class="
@@ -261,10 +264,11 @@ export default {
       console.log("socket connected");
     },
     usersOnline: function (data) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data): ',
-        data
-      );
+      // console.log("List user online: ", data);
+      console.log("List user online in component MenuLeft: ", data);
+    },
+    disconnect: function (data) {
+      console.log("List user online in component MenuLeft: ", data);
     },
   },
   data() {
@@ -373,6 +377,14 @@ export default {
       roomList: [],
     };
   },
+  watch: {
+    profile: {
+      handler() {
+        // console.log("Watch run");
+        this.getRoomListData();
+      },
+    },
+  },
   computed: {
     messengerStatus() {
       return MessengerStatus;
@@ -384,39 +396,25 @@ export default {
       return moment;
     },
   },
-  beforeMount() {
-    // Listening channel users online
-    // socket.on("users online", (list) => {
-    //   console.log("List users online: ", list);
-    // });
-  },
-  async mounted() {
-    // await userService
-    //   .getAll()
-    //   .then((response) => {
-    //     this.messengerList = response.data;
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
 
-    await roomService
-      .getRoomList()
-      .then((response) => {
-        const isSuccess = response.data;
-        if (!isSuccess) {
-          throw new Error("Something went wrong");
-        }
-        this.roomList = response.data;
-        // console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
   methods: {
     formatDate(date) {
       return moment(date).format("DD/MM/YYYY");
+    },
+    async getRoomListData() {
+      await roomService
+        .getRoomList()
+        .then((response) => {
+          const isSuccess = response.data;
+          if (!isSuccess) {
+            throw new Error("Something went wrong");
+          }
+          this.roomList = response.data;
+          // console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

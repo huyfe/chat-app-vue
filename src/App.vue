@@ -1,45 +1,23 @@
 <template>
-  <header id="header" class="mt-[-10px] fixed top-0 right-0 p-[20px] z-10">
-    <button
-      class="
-        w-[108px]
-        h-[40px]
-        bg-blue-dark
-        text-white-fade text-sm
-        hover:bg-orange
-        rounded
-        flex
-        items-center
-        justify-center
-        duration-200
-        mt-[10px]
-        ml-auto
-      "
-      @click.prevent="logout()"
-    >
-      <img
-        class="w-[20px] mr-2"
-        :src="require('./assets/images/exit.png')"
-        alt=""
-      />
-      Log out
-    </button>
-  </header>
-  <div class="wrapper flex h-[100vh]">
-    <router-view />
-  </div>
+  <Header />
+  <Default>
+    <div class="wrapper flex h-[100vh]">
+      <MenuLeft />
+      <router-view />
+    </div>
+  </Default>
+
   <notifications />
 </template>
 
 <script>
 import MenuLeft from "./components/MenuLeft.vue";
+import Header from "./components/Header.vue";
 import Main from "./components/Main.vue";
+import Default from "./layouts/Default";
 import { mapGetters, mapActions } from "vuex";
 import { checkCookie, getCookie } from "@/helpers/common";
 import { authService } from "./services/auth";
-import { deleteCookie } from "@/helpers/common";
-// import { io } from "socket.io-client";
-// import { socket } from "@/helpers/socket";
 
 export default {
   name: "App",
@@ -48,15 +26,18 @@ export default {
       console.log("socket connected");
     },
     general: function (data) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data): ',
-        data
-      );
+      // console.log(
+      //   'this method was fired by the socket server. eg: io.emit("customEmit", data): ',
+      //   data
+      // );
     },
   },
+
   components: {
     MenuLeft,
     Main,
+    Header,
+    Default,
   },
   computed: {
     ...mapGetters("client", {
@@ -79,10 +60,6 @@ export default {
   },
   methods: {
     ...mapActions("client", ["getProfile"]),
-    logout() {
-      deleteCookie("token");
-      this.$router.push("/login");
-    },
   },
 };
 </script>

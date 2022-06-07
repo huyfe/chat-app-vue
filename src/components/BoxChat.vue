@@ -1,7 +1,5 @@
 <template >
-  <MenuLeft />
-
-  <div class="chat-box w-1/2 flex flex-col justify-end p-6 pt-0 fade-in">
+  <div class="chat-box h-full flex flex-col justify-end p-6 pt-0 fade-in">
     <!-- Start chat box message list -->
     <div class="chat-box__head mb-auto -ml-6 shadow-md px-6">
       <div

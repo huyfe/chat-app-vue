@@ -6,18 +6,21 @@ import Main from '@/components/Main.vue';
 import Error from '@/components/Error.vue';
 import Login from '@/components/Login.vue';
 import Register from '@/components/Register.vue';
+import UsersOnline from '@/pages/UsersOnline.vue';
+import Home from "@/pages/Home";
+import RoomDetail from "@/pages/RoomDetail";
 
 // Import check cookie
 import { checkCookie } from './helpers/common';
 
 const routes = [
     {
-        name: "Main",
+        name: "Home",
         path: '/',
-        component: Main,
+        component: Home,
         meta: {
             requiresAuth: true
-        }
+        },
     },
     {
         name: 'Login',
@@ -30,11 +33,17 @@ const routes = [
     },
     {
         path: '/rooms/:id',
-        component: BoxChat,
+        component: RoomDetail,
         meta: {
             requiresAuth: true
         }
-
+    },
+    {
+        path: '/users-online',
+        component: UsersOnline,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/:catchAll(.*)',
