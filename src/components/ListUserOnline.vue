@@ -15,23 +15,31 @@
 
 <script>
 import { userService } from "@/services/user";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import UserOnlineElement from "@/components/elements/UserOnlineElement.vue";
+import { useStore } from "vuex";
+
 export default {
   name: "ListUserOnline",
   components: { UserOnlineElement },
   setup() {
     const listUserOnline = ref([]);
+    const store = useStore();
+    const profile = computed(() => store.state.client.profile);
     const getListUserOnlineData = async () => {
       await userService.getListUserOnline().then((response) => {
-        listUserOnline.value = response.data;
+        const idClient = profile.value.id;
+        console.log("Id client: ", idClient);
+        listUserOnline.value = response.data.filter(
+          (user) => user.id !== idClient
+        );
       });
     };
     onMounted(async () => {
       await getListUserOnlineData();
     });
 
-    return { listUserOnline, getListUserOnlineData };
+    return { listUserOnline, profile, getListUserOnlineData };
   },
   sockets: {
     connect: function () {
@@ -39,11 +47,13 @@ export default {
     },
     usersOnline: function (data) {
       // console.log("List user online: ", data);
-      this.listUserOnline = data;
+      this.listUserOnline =
+        data.length && data.filter((user) => user.id !== this.profile.id);
       console.log("List user online in component ListUsersOnline: ", data);
     },
     disconnect: function (data) {
-      this.listUserOnline = data;
+      this.listUserOnline =
+        data.length && data.filter((user) => user.id !== this.profile.id);
       console.log("List user online in component ListUsersOnline: ", data);
     },
   },

@@ -208,6 +208,7 @@ import { useStore } from "vuex";
 import Tooltip from "./Tooltip.vue";
 
 export default {
+  name: "BoxChat",
   components: {
     IconOnline,
     IconOffline,
@@ -217,6 +218,11 @@ export default {
     IconVoice,
     MenuLeft,
     Tooltip,
+  },
+  sockets: {
+    connect: function () {
+      console.log("socket connected");
+    },
   },
   setup() {
     // const chatBox = ref(room);
@@ -251,10 +257,8 @@ export default {
     onMounted(async () => {
       await getRoomDetailDataByID(route.params.id);
       setTimeout(() => {
-        console.log("RUNNN");
         const chatBoxListElement = document.querySelector(".chat-box__list");
         chatBoxListElement.scrollTop = chatBoxListElement.scrollHeight;
-        console.log(chatBoxListElement.scrollHeight);
       }, 0);
     });
 
@@ -269,6 +273,51 @@ export default {
     }),
   },
 
+  // watch: {
+  // profile: {
+  //   handler() {
+  //     if (this.profile) {
+  //       this.joinRoom(this.profile.id, this.$route.params.id);
+  //     }
+  //   },
+  // },
+  // "$route.params.id": {
+  //   handler: function () {
+  //     this.joinRoom(this.profile.id, this.$route.params.id);
+  //   },
+  //   deep: true,
+  //   immediate: true,
+  // },
+
+  // },
+
+  watch: {
+    "$route.params.id": {
+      handler: function (id) {
+        if (id) {
+          this.joinRoom(this.profile.id, this.$route.params.id);
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+    profile: {
+      handler: function (profile) {
+        if (profile && this.$route.params.id) {
+          this.joinRoom(this.profile.id, this.$route.params.id);
+        }
+      },
+    },
+  },
+
+  mounted() {
+    this.sockets.subscribe("room", function (data) {
+      // console.log(data);
+    });
+
+    this.subScribeMessageSocket();
+  },
+
   methods: {
     async sendMessage() {
       // Send text to server
@@ -281,6 +330,7 @@ export default {
           throw new Error("Something went wrong");
         }
         this.room.messagesData = result.data;
+        this.emitMessage(this.room.messagesData);
       } catch (error) {
         this.$notify({
           type: "error",
@@ -295,11 +345,23 @@ export default {
     },
     scrollToBottomChatBox() {
       setTimeout(() => {
-        console.log("RUNNN");
         const chatBoxListElement = document.querySelector(".chat-box__list");
-        chatBoxListElement.scrollTop = chatBoxListElement.scrollHeight;
-        console.log(chatBoxListElement.scrollHeight);
+        if (chatBoxListElement !== null) {
+          chatBoxListElement.scrollTop = chatBoxListElement.scrollHeight;
+        }
       }, 0);
+    },
+    joinRoom(idUser, room) {
+      this.$socket.emit("joinRoom", { idUser, room });
+    },
+    emitMessage(data) {
+      this.$socket.emit("chatMessage", data);
+    },
+    subScribeMessageSocket() {
+      this.sockets.subscribe("message", function (data) {
+        this.room.messagesData = data;
+        this.scrollToBottomChatBox();
+      });
     },
   },
 };

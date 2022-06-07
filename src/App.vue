@@ -44,8 +44,8 @@ export default {
       profile: "clientProfile",
     }),
   },
-  async mounted() {
-    const isLoggedIn = await checkCookie();
+  async beforeCreate() {
+    const isLoggedIn = checkCookie();
     const token = getCookie("token");
     // console.log("Is logged in in App.vue: ", isLoggedIn);
     if (isLoggedIn) {

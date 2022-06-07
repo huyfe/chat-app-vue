@@ -265,10 +265,10 @@ export default {
     },
     usersOnline: function (data) {
       // console.log("List user online: ", data);
-      console.log("List user online in component MenuLeft: ", data);
+      // console.log("List user online in component MenuLeft: ", data);
     },
     disconnect: function (data) {
-      console.log("List user online in component MenuLeft: ", data);
+      // console.log("List user online in component MenuLeft: ", data);
     },
   },
   data() {
