@@ -1,0 +1,26 @@
+.chat-box__item--me .chat-box__item__message {
+    animation: scaleMe 0.4s;
+}
+.chat-box__item--you .chat-box__item__message {
+    animation: scaleFriend 0.4s;
+}
+@keyframes scaleMe {
+    0% {
+        transform: scale(0);
+        transform-origin: top right;
+    }
+    100% {
+        transform: scale(1);
+        transform-origin: top right;
+    }
+}
+@keyframes scaleFriend {
+    0% {
+        transform: scale(0);
+        transform-origin: top left;
+    }
+    100% {
+        transform: scale(1);
+        transform-origin: top left;
+    }
+}

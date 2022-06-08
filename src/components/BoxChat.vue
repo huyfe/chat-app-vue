@@ -76,50 +76,54 @@
         }}</span>
       </div>
       <!-- End chat box date -->
-      <div
-        v-for="(item, index) in room.messagesData"
-        :key="`key_chat_box_${index}`"
-        class="chat-box__item"
-        :class="
-          profile.id !== item.idUser
-            ? 'chat-box__item--you'
-            : 'chat-box__item--me'
-        "
-      >
-        <div class="chat-box__item__name">
-          <!-- {{ `${item.firstName} ${item.lastName}` }} -->
-          {{
-            room.members.find((member) => member.idMember === item.idUser)
-              .fullName
-          }}
-        </div>
-        <div class="chat-box__item__avatar-messages">
-          <div class="chat-box__item__avatar">
-            <img
-              :src="item.avatar || require('@/assets/images/user.png')"
-              alt="Avatar"
-              title="Avatar"
-            />
+      <template v-if="room.messagesData && room.messagesData.length">
+        <div
+          v-for="(item, index) in room.messagesData"
+          :key="`key_chat_box_${index}`"
+          class="chat-box__item"
+          :class="
+            profile.id !== item.idUser
+              ? 'chat-box__item--you'
+              : 'chat-box__item--me'
+          "
+        >
+          <div class="chat-box__item__name">
+            <!-- {{ `${item.firstName} ${item.lastName}` }} -->
+            {{
+              room.members.find((member) => member.idMember === item.idUser)
+                .fullName
+            }}
           </div>
-          <div class="chat-box__item__messages">
-            <div
-              v-for="(message, messageIndex) in item.messages"
-              :key="`key_chat_box_message_${messageIndex}`"
-              class="chat-box__item__message"
-            >
-              <p class="chat-box__item__text break-word">
-                {{ message.text }}
-              </p>
-              <p class="chat-box__item__time position-relative">
-                <Tooltip
-                  :title="formatDateToTime(message.time, 'DD/MM/YYYY h:mm:ss')"
-                />
-                <span>{{ formatDateToTime(message.time, "h:mm") }}</span>
-              </p>
+          <div class="chat-box__item__avatar-messages">
+            <div class="chat-box__item__avatar">
+              <img
+                :src="item.avatar || require('@/assets/images/user.png')"
+                alt="Avatar"
+                title="Avatar"
+              />
+            </div>
+            <div class="chat-box__item__messages">
+              <div
+                v-for="(message, messageIndex) in item.messages"
+                :key="`key_chat_box_message_${messageIndex}`"
+                class="chat-box__item__message"
+              >
+                <p class="chat-box__item__text break-word">
+                  {{ message.text }}
+                </p>
+                <p class="chat-box__item__time position-relative">
+                  <Tooltip
+                    :title="
+                      formatDateToTime(message.time, 'DD/MM/YYYY h:mm:ss')
+                    "
+                  />
+                  <span>{{ formatDateToTime(message.time, "h:mm") }}</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </template>
     </div>
     <!-- End chat box message list -->
 
@@ -239,10 +243,12 @@ export default {
         friend.value = response.data.members.find(
           (member) => member.idMember !== store.state.client.profile.id
         );
-        firstMessageDate.value = formatDateToTime(
-          response.data.messagesData[0].messages[0].time,
-          "DD/MM/YYYY"
-        );
+        if (response.data.messagesData.length > 0) {
+          firstMessageDate.value = formatDateToTime(
+            response.data.messagesData[0].messages[0].time,
+            "DD/MM/YYYY"
+          );
+        }
       });
     };
 
@@ -251,6 +257,7 @@ export default {
     };
 
     watch(route.params.id, () => {
+      console.log("RUN WATCH");
       getRoomDetailDataByID(route.params.id);
     });
 
@@ -262,7 +269,14 @@ export default {
       }, 0);
     });
 
-    return { room, friend, firstMessageDate, textMessage, formatDateToTime };
+    return {
+      room,
+      friend,
+      firstMessageDate,
+      textMessage,
+      getRoomDetailDataByID,
+      formatDateToTime,
+    };
   },
   computed: {
     messengerStatus() {
@@ -293,17 +307,24 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function (id) {
-        if (id) {
+      handler: async function (to, from) {
+        console.log("From: ", from);
+        console.log("To: ", to);
+        this.leaveRoom(this.profile.id);
+        if (from && to) {
+          await this.getRoomDetailDataByID(to);
           this.joinRoom(this.profile.id, this.$route.params.id);
+          this.scrollToBottomChatBox();
         }
       },
       deep: true,
       immediate: true,
     },
     profile: {
-      handler: function (profile) {
+      handler: async function (profile) {
         if (profile && this.$route.params.id) {
+          this.leaveRoom(this.profile.id);
+          await this.getRoomDetailDataByID(this.$route.params.id);
           this.joinRoom(this.profile.id, this.$route.params.id);
         }
       },
@@ -311,8 +332,13 @@ export default {
   },
 
   mounted() {
-    this.sockets.subscribe("room", function (data) {
+    this.sockets.subscribe("room", function ({ message }) {
       // console.log(data);
+      this.$notify({
+        type: "success",
+        title: "Socket Notification",
+        text: message,
+      });
     });
 
     this.subScribeMessageSocket();
@@ -354,12 +380,20 @@ export default {
     joinRoom(idUser, room) {
       this.$socket.emit("joinRoom", { idUser, room });
     },
+    leaveRoom(idUser) {
+      this.$socket.emit("leaveRoom", { idUser });
+    },
     emitMessage(data) {
       this.$socket.emit("chatMessage", data);
     },
     subScribeMessageSocket() {
-      this.sockets.subscribe("message", function (data) {
-        this.room.messagesData = data;
+      this.sockets.subscribe("message", function ({ message, idRoom }) {
+        // this.room.messagesData = message;
+        console.log("Current room: ", this.$route.params.id);
+        if (idRoom === this.$route.params.id) {
+          console.log("Khớp");
+          this.room.messagesData = message;
+        }
         this.scrollToBottomChatBox();
       });
     },

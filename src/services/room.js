@@ -8,5 +8,11 @@ export const roomService = {
     },
     postMessage(idRoom, textMessage) {
         return axios.post(`/api/rooms/send-messages/${idRoom}`, { textMessage: textMessage });
+    },
+    findRoom(idFriend) {
+        return axios.get(`/api/rooms/find/${idFriend}`);
+    },
+    createRoom(idFriend) {
+        return axios.post(`/api/rooms/create`, { idFriend: idFriend });
     }
 }
