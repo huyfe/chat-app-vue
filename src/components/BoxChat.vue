@@ -226,6 +226,9 @@ export default {
   sockets: {
     connect: function () {
       console.log("socket connected");
+      if (this.$route.params.id && this.profile.id) {
+        this.joinRoom(this.profile.id, this.$route.params.id);
+      }
     },
   },
   setup() {
@@ -331,7 +334,11 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
+    if (this.profile) {
+      console.log("Mounted");
+      this.joinRoom(this.profile.id, this.$route.params.id);
+    }
     this.sockets.subscribe("room", function ({ message }) {
       // console.log(data);
       this.$notify({
@@ -379,6 +386,7 @@ export default {
     },
     joinRoom(idUser, room) {
       this.$socket.emit("joinRoom", { idUser, room });
+      console.log("Myself joined", idUser, room);
     },
     leaveRoom(idUser) {
       this.$socket.emit("leaveRoom", { idUser });
