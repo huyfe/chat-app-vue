@@ -15,7 +15,7 @@
           items-center
           justify-center
           duration-200
-          ml-auto ml-3
+          ml-3
         "
         @click.prevent="logout()"
       >

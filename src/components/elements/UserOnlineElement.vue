@@ -10,7 +10,7 @@
       </div>
       <div class="user-online-element__infor">
         <h3 class="user-online-element__fullname">{{ user.fullName }}</h3>
-        <p class="user-online-element__status">{{ user.status }}</p>
+        <p class="user-online-element__status">{{ user.status }} now</p>
       </div>
     </div>
   </div>
