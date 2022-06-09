@@ -337,7 +337,7 @@ export default {
   async mounted() {
     if (this.profile) {
       console.log("Mounted");
-      this.joinRoom(this.profile.id, this.$route.params.id);
+      // this.joinRoom(this.profile.id, this.$route.params.id);
     }
     this.sockets.subscribe("room", function ({ message }) {
       // console.log(data);

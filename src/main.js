@@ -32,7 +32,7 @@ app.use(Notifications)
 
 app.use(new VueSocketIO({
     debug: true,
-    connection: SocketIO('http://localhost:3000'),
+    connection: SocketIO(process.env.VUE_APP_BASE_URL),
     vuex: {
         store,
         actionPrefix: "SOCKET_",
