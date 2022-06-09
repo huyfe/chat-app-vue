@@ -1,11 +1,12 @@
 <template>
   <div @click.prevent="joinRoom" class="user-online-element cursor-pointer">
     <div class="user-online-element__template">
-      <div class="user-online-element__avatar">
+      <div class="user-online-element__avatar relative">
         <img
           :src="user.avatar || require('@/assets/images/avatar.png')"
           alt=""
         />
+        <IconOnline class="absolute w-[15px] h-[15px] top-[15%] right-[5%]" />
       </div>
       <div class="user-online-element__infor">
         <h3 class="user-online-element__fullname">{{ user.fullName }}</h3>
@@ -17,8 +18,11 @@
 
 <script>
 import { roomService } from "@/services/room";
+import IconOnline from "../icons/IconOnline.vue";
+
 export default {
   name: "UserOnlineElement",
+  components: { IconOnline },
   props: {
     user: {
       type: Object,
