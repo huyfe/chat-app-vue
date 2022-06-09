@@ -17,7 +17,7 @@
     @apply mb-6 last:mb-0 w-fit;
 
     &__name {
-      @apply text-sm font-semibold mb-2;
+      @apply text-sm font-semibold mb-2 text-dark;
     }
     &__avatar-messages {
       @apply flex gap-2;
@@ -31,10 +31,10 @@
       @apply w-fit mt-2 first:mt-0 bg-blue-light rounded px-4 py-3 text-sm;
     }
     &__text {
-      @apply min-w-[150px] max-w-[505px];
+      @apply min-w-[150px] max-w-[505px] text-dark;
     }
     &__time {
-      @apply text-right relative w-fit ml-auto;
+      @apply text-right relative w-fit ml-auto cursor-default;
       span {
         @apply text-blue-dark  text-xs opacity-60 mt-1;
       }
@@ -67,7 +67,7 @@
         @apply bg-orange text-white rounded-tr-none ml-auto;
       }
       .chat-box__item__text {
-        @apply min-w-fit;
+        @apply min-w-fit text-white;
       }
       .chat-box__item__time {
         @apply text-white-fade;

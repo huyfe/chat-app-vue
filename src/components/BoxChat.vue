@@ -68,7 +68,15 @@
     </div>
 
     <!-- Start chat box list message -->
-    <div class="chat-box__list overflow-auto pr-6">
+    <div
+      class="
+        chat-box__list
+        overflow-auto
+        pr-6
+        h-[calc(100%-60px)]
+        custom-scrollbar
+      "
+    >
       <!-- Start chat box date -->
       <div class="chat-box-date flex justify-center mb-7 mt-4">
         <span class="block py-1 px-5 bg-blue-dark rounded text-sm text-white">{{
