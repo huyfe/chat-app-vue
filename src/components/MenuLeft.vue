@@ -261,7 +261,7 @@ export default {
   },
   sockets: {
     connect: function () {
-      console.log("socket connected");
+      console.log("Menu left socket connected");
     },
     usersOnline: function (data) {
       // console.log("List user online: ", data);

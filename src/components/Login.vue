@@ -93,6 +93,7 @@ import { checkCookie } from "@/helpers/common";
 import axios from "axios";
 
 export default {
+  name: "Login",
   setup() {
     const email = ref("");
     const password = ref("");
@@ -109,7 +110,8 @@ export default {
         const result = await authService.login(this.email, this.password);
         this.getProfile(result.data.profile);
         axios.defaults.headers.common["auth-token"] = result.data.profile.token;
-
+        this.$socket.connect();
+        this.$socket.emit("usersOnline", result.data.profile.id);
         this.$router.push("/");
 
         this.$notify({
@@ -118,7 +120,6 @@ export default {
           title: "Success",
           text: "Login successfully",
         });
-        this.$socket.emit("usersOnline", result.data.profile.id);
       } catch (error) {
         console.log(error);
         this.$notify({

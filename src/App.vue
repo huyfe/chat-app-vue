@@ -23,7 +23,7 @@ export default {
   name: "App",
   sockets: {
     connect: function () {
-      console.log("socket connected");
+      console.log("App component socket connected");
     },
     general: function (data) {
       // console.log(
