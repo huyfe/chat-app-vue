@@ -31,6 +31,11 @@ export default {
       //   data
       // );
     },
+    usersOnline: function ({ usersOnlineListData, message }) {
+      this.$notify({
+        ...message,
+      });
+    },
   },
 
   components: {
@@ -55,6 +60,7 @@ export default {
         return;
       }
       this.getProfile(result.data.profile);
+      this.$socket.connect();
       this.$socket.emit("usersOnline", result.data.profile.id);
     }
   },

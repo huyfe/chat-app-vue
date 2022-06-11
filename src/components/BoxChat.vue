@@ -321,7 +321,10 @@ export default {
       handler: async function (to, from) {
         console.log("From: ", from);
         console.log("To: ", to);
-        this.leaveRoom(this.profile.id);
+        if (from !== undefined) {
+          console.log("Khác undefined");
+          this.leaveRoom(this.profile.id, from);
+        }
         if (from && to) {
           await this.getRoomDetailDataByID(to);
           this.joinRoom(this.profile.id, this.$route.params.id);
@@ -334,7 +337,7 @@ export default {
     profile: {
       handler: async function (profile) {
         if (profile && this.$route.params.id) {
-          this.leaveRoom(this.profile.id);
+          this.leaveRoom(this.profile.id, this.$route.params.id);
           await this.getRoomDetailDataByID(this.$route.params.id);
           this.joinRoom(this.profile.id, this.$route.params.id);
         }
@@ -396,8 +399,8 @@ export default {
       this.$socket.emit("joinRoom", { idUser, room });
       console.log("Myself joined", idUser, room);
     },
-    leaveRoom(idUser) {
-      this.$socket.emit("leaveRoom", { idUser });
+    leaveRoom(idUser, room) {
+      this.$socket.emit("leaveRoom", { idUser, room });
     },
     emitMessage(data) {
       this.$socket.emit("chatMessage", data);

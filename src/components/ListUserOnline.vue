@@ -45,20 +45,17 @@ export default {
     connect: function () {
       console.log("socket connected");
     },
-    usersOnline: function (data) {
-      // console.log("List user online: ", data);
+    usersOnline: function ({ usersOnlineListData, message }) {
+      console.log(this.listUserOnline.length);
+      console.log(usersOnlineListData.length);
       this.listUserOnline =
-        data.length && data.filter((user) => user.id !== this.profile.id);
-      console.log("List user online in component ListUsersOnline: ", data);
+        usersOnlineListData.length &&
+        usersOnlineListData.filter((user) => user.id !== this.profile.id);
+      console.log(
+        "List user online in component ListUsersOnline: ",
+        usersOnlineListData
+      );
     },
-    disconnect: function (data) {
-      this.listUserOnline =
-        data.length && data.filter((user) => user.id !== this.profile.id);
-      console.log("List user online in component ListUsersOnline: ", data);
-    },
-  },
-  mounted() {
-    this.$socket.connect();
   },
 };
 </script>
