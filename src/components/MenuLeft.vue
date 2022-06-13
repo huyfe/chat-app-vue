@@ -261,13 +261,10 @@ export default {
   },
   sockets: {
     connect: function () {
-      console.log("Menu left socket connected");
+      console.log("MenuLeft socket connected");
     },
     usersOnline: function (data) {
       // console.log("List user online: ", data);
-      // console.log("List user online in component MenuLeft: ", data);
-    },
-    disconnect: function (data) {
       // console.log("List user online in component MenuLeft: ", data);
     },
   },

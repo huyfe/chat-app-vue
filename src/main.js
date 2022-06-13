@@ -20,7 +20,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 const app = createApp(App)
 
 // Set base URL
-axios.defaults.baseURL = process.env.VUE_APP_BASE_URL_DEV || 'no-process-env';
+axios.defaults.baseURL = process.env.VUE_APP_BASE_URL || 'no-process-env';
 
 // Attach Authorization header for all axios requests 
 const token = getCookie("token");
@@ -35,7 +35,7 @@ app.use(VueLoading)
 
 app.use(new VueSocketIO({
     debug: true,
-    connection: SocketIO(process.env.VUE_APP_BASE_URL_DEV),
+    connection: SocketIO(process.env.VUE_APP_BASE_URL),
     vuex: {
         store,
         actionPrefix: "SOCKET_",

@@ -23,7 +23,14 @@ export default {
   name: "App",
   sockets: {
     connect: function () {
-      console.log("App component socket connected");
+      console.log("App socket connected");
+      if (this.profile.id) {
+        this.$socket.emit(
+          "usersOnline",
+          this.profile.id,
+          "Emit in app connect"
+        );
+      }
     },
     general: function (data) {
       // console.log(
@@ -60,6 +67,7 @@ export default {
         return;
       }
       this.getProfile(result.data.profile);
+      console.log("Data profile id in App: ", result.data.profile.id);
       this.$socket.connect();
       this.$socket.emit("usersOnline", result.data.profile.id);
     }

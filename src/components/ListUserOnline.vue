@@ -41,7 +41,6 @@ export default {
     const getListUserOnlineData = async () => {
       await userService.getListUserOnline().then((response) => {
         const idClient = profile.value.id;
-        console.log("Id client: ", idClient);
         listUserOnline.value = response.data.filter(
           (user) => user.id !== idClient
         );
@@ -55,9 +54,9 @@ export default {
   },
   sockets: {
     connect: function () {
-      console.log("socket connected");
+      console.log("ListUserOnline socket connected");
     },
-    usersOnline: function ({ usersOnlineListData, message }) {
+    usersOnline: function ({ usersOnlineListData, message, text }) {
       console.log(this.listUserOnline.length);
       console.log(usersOnlineListData.length);
       this.listUserOnline =
@@ -70,7 +69,7 @@ export default {
     },
   },
   mounted() {
-    this.$socket.connect();
+    // this.$socket.connect();
   },
 };
 </script>
