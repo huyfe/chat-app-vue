@@ -33,6 +33,7 @@ export default {
   methods: {
     async joinRoom() {
       const idFriend = this.user.id;
+      let loader = this.$loading.show({ loader: "dots", color: "#f3ba4a" });
       try {
         const room = await roomService.findRoom(idFriend);
         if (room.data) {
@@ -43,6 +44,8 @@ export default {
           const createRoom = await roomService.createRoom(idFriend);
           return this.$router.push(`/rooms/${createRoom.data._id}`);
         } catch (err) {}
+      } finally {
+        loader.hide();
       }
     },
   },

@@ -218,6 +218,7 @@ import { useRoute } from "vue-router";
 import moment from "moment";
 import { useStore } from "vuex";
 import Tooltip from "./Tooltip.vue";
+import { useLoading } from "vue3-loading-overlay";
 
 export default {
   name: "BoxChat",
@@ -247,20 +248,23 @@ export default {
     const store = useStore();
     const firstMessageDate = ref("");
     const textMessage = ref("");
-
+    let loader = useLoading();
     const getRoomDetailDataByID = async (id) => {
-      await roomService.detail(id).then((response) => {
-        room.value = response.data;
-        friend.value = response.data.members.find(
-          (member) => member.idMember !== store.state.client.profile.id
-        );
-        if (response.data.messagesData.length > 0) {
-          firstMessageDate.value = formatDateToTime(
-            response.data.messagesData[0].messages[0].time,
-            "DD/MM/YYYY"
+      await roomService
+        .detail(id)
+        .then((response) => {
+          room.value = response.data;
+          friend.value = response.data.members.find(
+            (member) => member.idMember !== store.state.client.profile.id
           );
-        }
-      });
+          if (response.data.messagesData.length > 0) {
+            firstMessageDate.value = formatDateToTime(
+              response.data.messagesData[0].messages[0].time,
+              "DD/MM/YYYY"
+            );
+          }
+        })
+        .finally(() => {});
     };
 
     const formatDateToTime = (date, format) => {
@@ -273,10 +277,12 @@ export default {
     });
 
     onMounted(async () => {
+      loader.show({ loader: "dots", color: "#f3ba4a" });
       await getRoomDetailDataByID(route.params.id);
       setTimeout(() => {
         const chatBoxListElement = document.querySelector(".chat-box__list");
         chatBoxListElement.scrollTop = chatBoxListElement.scrollHeight;
+        loader.hide();
       }, 0);
     });
 
@@ -298,24 +304,6 @@ export default {
     }),
   },
 
-  // watch: {
-  // profile: {
-  //   handler() {
-  //     if (this.profile) {
-  //       this.joinRoom(this.profile.id, this.$route.params.id);
-  //     }
-  //   },
-  // },
-  // "$route.params.id": {
-  //   handler: function () {
-  //     this.joinRoom(this.profile.id, this.$route.params.id);
-  //   },
-  //   deep: true,
-  //   immediate: true,
-  // },
-
-  // },
-
   watch: {
     "$route.params.id": {
       handler: async function (to, from) {
@@ -326,9 +314,11 @@ export default {
           this.leaveRoom(this.profile.id, from);
         }
         if (from && to) {
+          let loader = this.$loading.show({ loader: "dots", color: "#f3ba4a" });
           await this.getRoomDetailDataByID(to);
           this.joinRoom(this.profile.id, this.$route.params.id);
           this.scrollToBottomChatBox();
+          loader.hide();
         }
       },
       deep: true,
@@ -337,9 +327,11 @@ export default {
     profile: {
       handler: async function (profile) {
         if (profile && this.$route.params.id) {
+          let loader = this.$loading.show({ loader: "dots", color: "#f3ba4a" });
           this.leaveRoom(this.profile.id, this.$route.params.id);
           await this.getRoomDetailDataByID(this.$route.params.id);
           this.joinRoom(this.profile.id, this.$route.params.id);
+          loader.hide();
         }
       },
     },
