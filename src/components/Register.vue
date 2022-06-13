@@ -1,8 +1,11 @@
 <template>
   <div class="login w-full">
-    <div class="container h-[100vh] flex">
-      <div class="container__left w-3/5 flex items-center">
-        <form @submit.prevent="submit" class="form px-20 w-full">
+    <div class="container h-[100vh] flex mx-auto">
+      <div class="container__left w-1/2 flex items-center">
+        <form
+          @submit.prevent="submit"
+          class="form max-w-[400px] w-full mx-auto fade-in"
+        >
           <div
             class="
               form__wrapper
@@ -105,14 +108,25 @@
                 Register
               </button>
             </div>
-            <div class="link-register text-center text-sm">
+            <div
+              class="
+                link-register
+                text-center text-sm
+                hover:underline
+                duration-200
+              "
+            >
               <router-link to="/login">Have account? Login</router-link>
             </div>
           </div>
         </form>
       </div>
-      <div class="container__right w-2/5 flex items-center">
-        <img :src="require('@/assets/images/login.png')" alt="" class="h-4/5" />
+      <div class="container__right w-1/2 flex items-center">
+        <img
+          :src="require('@/assets/images/login.png')"
+          alt=""
+          class="fade-in"
+        />
       </div>
     </div>
   </div>
@@ -137,6 +151,7 @@ export default {
   methods: {
     ...mapActions("client", ["getProfile"]),
     async submit() {
+      let loader = this.$loading.show({ loader: "dots", color: "#f3ba4a" });
       const user = {
         name: this.fullName,
         email: this.email,
@@ -153,13 +168,14 @@ export default {
         });
         this.$router.push("/login");
       } catch (e) {
-        console.log(e);
         this.$notify({
           type: "error",
           title: "Register failed",
           text: e.response.data,
-          duration: 1000,
+          duration: 1500,
         });
+      } finally {
+        loader.hide();
       }
     },
   },

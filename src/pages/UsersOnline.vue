@@ -1,5 +1,5 @@
 <template>
-  <div class="users-online-page w-1/2">
+  <div class="users-online-page w-full overflow-hidden">
     <ListUserOnline />
   </div>
 </template>

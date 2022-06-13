@@ -9,11 +9,13 @@ import VueAxios from 'vue-axios'
 
 import Notifications from '@kyvg/vue3-notification'
 
-import { getCookie } from './helpers/common';
+import { getCookie } from './helpers/common'
 
 import VueSocketIO from 'vue-3-socket.io'
 import SocketIO from 'socket.io-client'
 
+import VueLoading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 
 const app = createApp(App)
 
@@ -29,6 +31,7 @@ app.use(router)
 app.use(VueAxios, axios)
 app.provide('axios', app.config.globalProperties.axios)  // provide 'axios'
 app.use(Notifications)
+app.use(VueLoading)
 
 app.use(new VueSocketIO({
     debug: true,

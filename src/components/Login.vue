@@ -1,8 +1,11 @@
 <template>
   <div class="login w-full">
-    <div class="container h-[100vh] flex">
-      <div class="container__left w-2/4 flex items-center">
-        <form @submit.prevent="login" class="form px-20 w-full ml-20">
+    <div class="container h-[100vh] flex mx-auto">
+      <div class="container__left w-1/2 flex items-center">
+        <form
+          @submit.prevent="login"
+          class="form max-w-[350px] w-full mx-auto fade-in"
+        >
           <div
             class="
               form__wrapper
@@ -70,15 +73,19 @@
               </button>
             </div>
             <div class="link-register text-center text-sm">
-              <router-link to="/register"
+              <router-link class="hover:underline duration-200" to="/register"
                 >Haven't account? Register</router-link
               >
             </div>
           </div>
         </form>
       </div>
-      <div class="container__right w-2/4 flex items-center">
-        <img :src="require('@/assets/images/login.png')" alt="" class="h-5/6" />
+      <div class="container__right w-1/2 flex items-center">
+        <img
+          :src="require('@/assets/images/login.png')"
+          alt=""
+          class="fade-in"
+        />
       </div>
     </div>
   </div>
@@ -106,6 +113,8 @@ export default {
   methods: {
     ...mapActions("client", ["getProfile"]),
     async login() {
+      let loader = this.$loading.show({ loader: "dots", color: "#f3ba4a" });
+
       try {
         const result = await authService.login(this.email, this.password);
         this.getProfile(result.data.profile);
@@ -127,6 +136,8 @@ export default {
           title: "Error",
           text: error.response ? error.response.data : "Something went wrong",
         });
+      } finally {
+        loader.hide();
       }
     },
   },
