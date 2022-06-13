@@ -145,9 +145,21 @@ export default {
       try {
         const result = await authService.register(user);
         console.log(result);
+        this.$notify({
+          type: "success",
+          title: "Register successfully",
+          text: "Please login again with email and password you have registered",
+          duration: 1000,
+        });
         this.$router.push("/login");
       } catch (e) {
         console.log(e);
+        this.$notify({
+          type: "error",
+          title: "Register failed",
+          text: e.response.data,
+          duration: 1000,
+        });
       }
     },
   },
