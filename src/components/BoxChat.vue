@@ -3,17 +3,7 @@
     <!-- Start chat box message list -->
     <div class="chat-box__head mb-auto -ml-6 shadow-md px-6">
       <div
-        class="
-          friend
-          h-[60px]
-          flex
-          items-center
-          p-1
-          pl-0
-          group-hover:bg-blue-dark group-hover:shadow-blue-dark
-          rounded
-          duration-100
-        "
+        class="friend h-[60px] flex items-center p-1 pl-0 group-hover:bg-blue-dark group-hover:shadow-blue-dark rounded duration-100"
       >
         <div class="messenger-item__avatar mr-3 relative">
           <img
@@ -36,29 +26,13 @@
         </div>
         <div class="messenger-item__name w-full overflow-hidden">
           <h3
-            class="
-              font-semibold
-              text-sm text-dark
-              group-hover:text-white
-              flex
-              justify-between
-              mb-[3px]
-              duration-100
-            "
+            class="font-semibold text-sm text-dark group-hover:text-white flex justify-between mb-[3px] duration-100"
           >
             <span>{{ friend.fullName }}</span>
           </h3>
           <div class="flex">
             <p
-              class="
-                w-2/3
-                text-grayer
-                group-hover:text-white
-                font-light
-                text-xs
-                truncate
-                duration-100
-              "
+              class="w-2/3 text-grayer group-hover:text-white font-light text-xs truncate duration-100"
             >
               {{ friend.offlineAt || "Đang hoạt động" }}
             </p>
@@ -69,13 +43,7 @@
 
     <!-- Start chat box list message -->
     <div
-      class="
-        chat-box__list
-        overflow-auto
-        pr-6
-        h-[calc(100%-60px)]
-        custom-scrollbar
-      "
+      class="chat-box__list overflow-auto pr-6 h-[calc(100%-60px)] custom-scrollbar"
     >
       <!-- Start chat box date -->
       <div class="chat-box-date flex justify-center mb-7 mt-4">
@@ -140,55 +108,19 @@
       <div>
         <form @submit.prevent="sendMessage" class="relative">
           <div
-            class="
-              chat-box__controls__list
-              h-full
-              absolute
-              top-0
-              left-[25px]
-              flex
-              items-center
-            "
+            class="chat-box__controls__list h-full absolute top-0 left-[25px] flex items-center"
           >
             <IconAttachment class="mr-4" />
             <IconVoice />
           </div>
           <input
             v-model="textMessage"
-            class="
-              block
-              w-full
-              py-2
-              pl-19
-              pr-[150px]
-              border border-blue-fade
-              outline-0
-              rounded
-              bg-white-fade
-              focus:border-blue-dark
-              text-sm text-grayer
-              placeholder:text-grayer
-              mr-5
-            "
+            class="block w-full py-2 pl-19 pr-[150px] border border-blue-fade outline-0 rounded bg-white-fade focus:border-blue-dark text-sm text-grayer placeholder:text-grayer mr-5"
             placeholder="Type a new message..."
           />
           <button
             type="submit"
-            class="
-              h-full
-              w-[108px]
-              absolute
-              top-0
-              right-0
-              bg-blue-dark
-              text-white-fade text-sm
-              hover:bg-orange
-              rounded
-              flex
-              items-center
-              justify-center
-              duration-200
-            "
+            class="h-full w-[108px] absolute top-0 right-0 bg-blue-dark text-white-fade text-sm hover:bg-orange rounded flex items-center justify-center duration-200"
           >
             Send <IconSend class="ml-3" />
           </button>
@@ -218,7 +150,7 @@ import { useRoute } from "vue-router";
 import moment from "moment";
 import { useStore } from "vuex";
 import Tooltip from "./Tooltip.vue";
-import { useLoading } from "vue3-loading-overlay";
+import { useLoading } from "vue-loading-overlay";
 
 export default {
   name: "BoxChat",
