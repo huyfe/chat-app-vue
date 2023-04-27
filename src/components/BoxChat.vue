@@ -209,7 +209,7 @@ export default {
     });
 
     onMounted(async () => {
-      loader.show({ loader: "dots", color: "#f3ba4a" });
+      const loader = this.$loading.show({ loader: "dots", color: "#f3ba4a" });
       await getRoomDetailDataByID(route.params.id);
       setTimeout(() => {
         const chatBoxListElement = document.querySelector(".chat-box__list");
